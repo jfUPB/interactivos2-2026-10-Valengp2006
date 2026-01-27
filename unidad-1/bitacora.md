@@ -34,7 +34,7 @@ Experimentación son Strudel:
 
 ### Actividad 03 27/01/2026
 
-´´´javascript
+```javascript
 setcps(0.7);
 
 p1: n("0 2 4 6 7 6 4 2")
@@ -55,5 +55,6 @@ p4: sound("[bd*4,~ rim ~ cp]*<1 [2 4]>")
 <img width="520" height="409" alt="Captura de pantalla 2026-01-27 a la(s) 9 25 59 a m" src="https://github.com/user-attachments/assets/bc844247-53f2-48d2-8939-276ccdcfb84c" />
 
 ## Bitácora de reflexión
+
 
 
