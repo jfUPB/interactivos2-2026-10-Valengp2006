@@ -34,7 +34,26 @@ Experimentación son Strudel:
 
 ### Actividad 03 27/01/2026
 
+´´´javascript
+setcps(0.7);
 
+p1: n("0 2 4 6 7 6 4 2")
+  .scale("<c3:major>")
+  .distort(0.9)
+  .superimpose((x) => x.detune("<0.5>"))
+  .lpenv(perlin.slow(3).range(1, 4))
+  .lpf(perlin.slow(2).range(100, 2000))
+  .gain(0.3);
+
+p2: "<a1>/8".clip(0.8).struct("x*8").note();
+
+p3: n("0@3 2 4 <[6,8] [7,9]>")
+.scale("C:minor").sound("piano")
+
+p4: sound("[bd*4,~ rim ~ cp]*<1 [2 4]>")
+´´´
+<img width="520" height="409" alt="Captura de pantalla 2026-01-27 a la(s) 9 25 59 a m" src="https://github.com/user-attachments/assets/bc844247-53f2-48d2-8939-276ccdcfb84c" />
 
 ## Bitácora de reflexión
+
 
