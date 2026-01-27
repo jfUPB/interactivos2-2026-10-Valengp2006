@@ -13,7 +13,7 @@
 
 ### Actividad 02
 
-Explicación de la experimentacion anterior:
+Explicación del caso de estudio:
 
 - Explica detalladamente cómo funciona el sistema físico interactivo del caso de estudio.
 - Describe la variación que has propuesto y cómo la has implementado.
@@ -56,6 +56,7 @@ p4: sound("[bd*4,~ rim ~ cp]*<1 [2 4]>")
 <img width="520" height="409" alt="Captura de pantalla 2026-01-27 a la(s) 9 25 59 a m" src="https://github.com/user-attachments/assets/bc844247-53f2-48d2-8939-276ccdcfb84c" />
 
 ## Bitácora de reflexión
+
 
 
 
