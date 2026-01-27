@@ -214,6 +214,10 @@ Este patrón crea un ritmo complejo de batería electrónica donde:
 
 ### Actividad 04 27/01/2026
 
+Comencé desde cero 4 veces porque los resultados no me gustaban. Finalmente, usé como base el opening de *Stranger Things* de la biblioteca de ejemplos de clase y lo modifiqué con técnicas aprendidas en la guía de Strudel.
+
+**Código Completo**
+
 ```javascript
 setcps(0.7);
 
@@ -228,14 +232,51 @@ p1: n("0 2 4 6 7 6 4 2")
 p2: "<a1>/8".clip(0.8).struct("x*8").note();
 
 p3: n("0@3 2 4 <[6,8] [7,9]>")
-.scale("C:minor").sound("piano")
+  .scale("C:minor")
+  .sound("piano")
 
 p4: sound("[bd*4,~ rim ~ cp]*<1 [2 4]>")
 ```
 
+**Explicación del Código**
+
+**`setcps(0.7)`**
+Establece el tempo a 0.7 ciclos por segundo (aproximadamente 42 BPM), dándole un ritmo moderado a la pieza.
+
+**Patrón 1 (p1): Sintetizador Principal**
+- `n("0 2 4 6 7 6 4 2")` - Secuencia melódica que sube y baja
+- `.scale("<c3:major>")` - Usa la escala de Do mayor
+- `.distort(0.9)` - Añade distorsión fuerte para un sonido más electrónico
+- `.superimpose((x) => x.detune("<0.5>"))` - Duplica el sonido ligeramente desafinado, creando un efecto chorus
+- `.lpenv(perlin.slow(3).range(1, 4))` - Modula el filtro de forma orgánica usando ruido Perlin
+- `.lpf(perlin.slow(2).range(100, 2000))` - Filtro paso bajo que cambia el brillo del sonido dinámicamente
+- `.gain(0.3)` - Volumen al 30%
+
+**Patrón 2 (p2): Bajo**
+- `"<a1>/8"` - Nota La grave dividida en 8 partes
+- `.clip(0.8)` - Limita la amplitud para evitar saturación
+- `.struct("x*8")` - Crea 8 pulsos regulares por ciclo
+- `.note()` - Convierte los valores en notas
+
+**Patrón 3 (p3): Piano**
+- `n("0@3 2 4 <[6,8] [7,9]>")` - Melodía con acordes que alternan cada ciclo. El `@3` hace que la primera nota dure 3 tiempos
+- `.scale("C:minor")` - Escala de Do menor (sonido más melancólico)
+- `.sound("piano")` - Usa timbre de piano
+
+**Patrón 4 (p4): Percusión**
+- `"[bd*4,~ rim ~ cp]"` - Tres capas:
+  - `bd*4`: bombo 4 veces
+  - `~ rim ~ cp`: rim y clap con silencios
+- `*<1 [2 4]>` - Multiplica el patrón de forma variable: en un ciclo suena normal, en el siguiente se densifica
+
+**Resultado**
+
+La pieza combina una melodía principal atmosférica (p1) con bajo constante (p2), piano melancólico (p3) y percusión variable (p4). El contraste entre Do mayor (p1) y Do menor (p3) crea tensión armónica, mientras que las modulaciones con ruido Perlin hacen que el sonido evolucione de forma natural.
+
 <img width="520" height="409" alt="Captura de pantalla 2026-01-27 a la(s) 9 25 59 a m" src="https://github.com/user-attachments/assets/bc844247-53f2-48d2-8939-276ccdcfb84c" />
 
 ## Bitácora de reflexión
+
 
 
 
