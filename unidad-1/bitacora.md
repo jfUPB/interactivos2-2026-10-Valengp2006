@@ -11,8 +11,30 @@
 <img width="1352" height="788" alt="Captura de pantalla 2026-01-22 a la(s) 9 44 49 a m" src="https://github.com/user-attachments/assets/13e279e0-2b02-4315-bb80-118443611ade" />
 <img width="1352" height="789" alt="Captura de pantalla 2026-01-22 a la(s) 9 45 08 a m" src="https://github.com/user-attachments/assets/060fb382-bada-4f52-9aa4-486536c77560" />
 
+### Actividad 02
+
+Explicación de la experimentacion anterior:
+
+- Explica detalladamente cómo funciona el sistema físico interactivo del caso de estudio.
+- Describe la variación que has propuesto y cómo la has implementado.
+- Muestra el código y explica paso a paso cómo reproducir tu variación del caso de estudio.
+
+
+### Actividad 03
+
+Experimentación son Strudel:
+
+- Documenta cada experimento que realices con Strudel.
+- Explica detalladamente cómo funciona cada una de las partes del código que has escrito.
+
+<img width="538" height="352" alt="Captura de pantalla 2026-01-27 a la(s) 8 11 02 a m" src="https://github.com/user-attachments/assets/e7474ea5-88cb-4904-8d0f-c312bff9b01e" />
+
+
 ## Bitácora de aplicación 
+
+### Actividad 03 27/01/2026
 
 
 
 ## Bitácora de reflexión
+
