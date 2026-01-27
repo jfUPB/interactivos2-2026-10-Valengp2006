@@ -51,10 +51,12 @@ p3: n("0@3 2 4 <[6,8] [7,9]>")
 .scale("C:minor").sound("piano")
 
 p4: sound("[bd*4,~ rim ~ cp]*<1 [2 4]>")
-´´´
+```
+
 <img width="520" height="409" alt="Captura de pantalla 2026-01-27 a la(s) 9 25 59 a m" src="https://github.com/user-attachments/assets/bc844247-53f2-48d2-8939-276ccdcfb84c" />
 
 ## Bitácora de reflexión
+
 
 
 
