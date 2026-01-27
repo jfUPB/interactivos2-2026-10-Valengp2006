@@ -124,13 +124,91 @@ Un patrón rítmico más complejo que combina el ritmo original con una versión
 
 ### Actividad 03
 
-Experimentación son Strudel:
+**Código del experimento**
 
-- Documenta cada experimento que realices con Strudel.
-- Explica detalladamente cómo funciona cada una de las partes del código que has escrito.
+```javascript
+setcps(0.4)
+//set cicles per seconds
+
+let drum = stack (
+  s("oh").beat("0, 2, 5, 7, 9, 13, 15", 16),
+  s("cr").beat("1, 4, 6, 8, 10, 12, 14", 16),
+  s("cp").beat("4, 12", 16),
+  s("bd").beat("0, 5, 7, 10, 15", 16)
+)
+
+$drum: drum
+```
+
+**Explicación detallada del código**
+
+**Línea 1: `setcps(0.4)`**
+- **Función**: Establece la velocidad de reproducción
+- **Parámetro**: `0.4` ciclos por segundo (aproximadamente 24 BPM)
+- **Efecto**: Controla qué tan rápido se reproduce el patrón completo
+- **Nota**: Un valor más bajo hace el ritmo más lento, un valor más alto lo acelera
+
+**Línea 4: `let drum = stack (`**
+- **`let drum`**: Crea una variable llamada `drum` que almacena todo el patrón
+- **`stack(`**: Función que superpone múltiples capas de sonido para que suenen simultáneamente
+- **Propósito**: Permite combinar diferentes instrumentos de percusión en un solo patrón
+
+**Línea 5: `s("oh").beat("0, 2, 5, 7, 9, 13, 15", 16)`**
+- **`s("oh")`**: Selecciona el sonido "oh" (open hi-hat - platillo abierto)
+- **`.beat("0, 2, 5, 7, 9, 13, 15", 16)`**: Define en qué posiciones del ciclo suena
+  - Primer argumento: `"0, 2, 5, 7, 9, 13, 15"` son las posiciones donde suena el hi-hat
+  - Segundo argumento: `16` es la división total del ciclo (16 partes)
+- **Resultado**: El open hi-hat suena en las posiciones 0, 2, 5, 7, 9, 13 y 15 de un ciclo dividido en 16 partes
+
+**Línea 6: `s("cr").beat("1, 4, 6, 8, 10, 12, 14", 16)`**
+- **`s("cr")`**: Selecciona el sonido "cr" (crash cymbal - platillo crash)
+- **`.beat("1, 4, 6, 8, 10, 12, 14", 16)`**: El crash suena en las posiciones 1, 4, 6, 8, 10, 12 y 14
+- **Efecto**: Crea un patrón complementario al open hi-hat, llenando diferentes espacios rítmicos
+
+**Línea 7: `s("cp").beat("4, 12", 16)`**
+- **`s("cp")`**: Selecciona el sonido "cp" (clap - palmada)
+- **`.beat("4, 12", 16)`**: La palmada suena solo en las posiciones 4 y 12
+- **Función**: Actúa como el tiempo fuerte del patrón, similar al redoblante en música tradicional
+
+**Línea 8: `s("bd").beat("0, 5, 7, 10, 15", 16)`**
+- **`s("bd")`**: Selecciona el sonido "bd" (bass drum - bombo)
+- **`.beat("0, 5, 7, 10, 15", 16)`**: El bombo suena en las posiciones 0, 5, 7, 10 y 15
+- **Propósito**: Proporciona la base grave y el pulso fundamental del ritmo
+
+**Línea 11: `$drum: drum`**
+- **`$drum:`**: Crea un canal de salida llamado "drum"
+- **`drum`**: Envía el contenido de la variable `drum` a ese canal
+- **Función**: Hace que el patrón se reproduzca y sea audible
+- **Nota**: Sin esta línea, el patrón no sonaría
+
+**Concepto del método `.beat()`**
+
+El método `.beat()` permite especificar exactamente en qué momentos de un ciclo debe sonar un instrumento:
+
+- **Sintaxis**: `.beat("posiciones", divisiones_totales)`
+- **Ventaja**: Control preciso sobre el ritmo sin usar notación de patrones complejos
+- **Ejemplo**: `.beat("0, 4, 8, 12", 16)` hace que el sonido suene cada 4 pasos en un ciclo de 16
+
+**Representación visual del patrón (ciclo de 16 partes)**
+
+```
+Posición: 0  1  2  3  4  5  6  7  8  9  10 11 12 13 14 15
+---------------------------------------------------------------
+oh:       X     X        X     X     X           X     X
+cr:          X        X     X     X     X     X     X     X
+cp:                   X                          X
+bd:       X              X     X           X              X
+```
+
+**Resultado sonoro**
+
+Este patrón crea un ritmo complejo de batería electrónica donde:
+- Los hi-hats (oh y cr) crean una textura continua alternada
+- Los claps (cp) marcan los acentos principales
+- El bombo (bd) proporciona el pulso de baja frecuencia
+- La combinación genera un groove polirrítmico interesante
 
 <img width="538" height="352" alt="Captura de pantalla 2026-01-27 a la(s) 8 11 02 a m" src="https://github.com/user-attachments/assets/e7474ea5-88cb-4904-8d0f-c312bff9b01e" />
-
 
 ## Bitácora de aplicación 
 
@@ -158,6 +236,7 @@ p4: sound("[bd*4,~ rim ~ cp]*<1 [2 4]>")
 <img width="520" height="409" alt="Captura de pantalla 2026-01-27 a la(s) 9 25 59 a m" src="https://github.com/user-attachments/assets/bc844247-53f2-48d2-8939-276ccdcfb84c" />
 
 ## Bitácora de reflexión
+
 
 
 
