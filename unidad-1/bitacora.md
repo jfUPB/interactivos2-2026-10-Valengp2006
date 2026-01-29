@@ -277,8 +277,9 @@ La pieza combina una melodía principal atmosférica (p1) con bajo constante (p2
 
 ## Bitácora de reflexión
 
+### Actividad 05  29/01/2026
 
-
+<img width="678" height="455" alt="Captura de pantalla 2026-01-29 a la(s) 9 33 30 a m" src="https://github.com/user-attachments/assets/718c6db6-54b6-4be5-85f1-9f7cee38196a" />
 
 
 
