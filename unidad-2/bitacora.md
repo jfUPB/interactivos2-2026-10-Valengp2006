@@ -295,13 +295,15 @@ s visuales:** Un solo mensaje OSC genera múltiples animaciones simultáneas
 
 <img width="578" height="380" alt="Captura de pantalla 2026-02-08 a la(s) 9 46 29 p m" src="https://github.com/user-attachments/assets/ae9e907a-e44d-4708-9512-096913bf9e13" />
 <img width="578" height="378" alt="Captura de pantalla 2026-02-08 a la(s) 9 46 36 p m" src="https://github.com/user-attachments/assets/efd4d16e-514d-4772-b21b-b010b3f00708" />
-![Grabación-de-pantalla-2026-02-08-a-la_s_-9 48 40 p m](https://github.com/user-attachments/assets/2046d05b-bb8e-42ef-978d-8cba94d7d300)
+
+![Grabación-de-pantalla-2026-02-08-a-la_s_-9 48 40 p m](https://github.com/user-attachments/assets/e83b981b-ada8-4b9c-a3b7-e0914cbbcc2c)
 
 ## Bitácora de aplicación 
 
 
 
 ## Bitácora de reflexión
+
 
 
 
