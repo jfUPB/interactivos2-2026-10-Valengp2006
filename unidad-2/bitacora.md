@@ -413,7 +413,6 @@ if (progress <= 1.0) {
 
     socket.onmessage = (event) => {
         const msg = JSON.parse(event.data);
-        console.log('Mensaje OSC recibido:', msg);
         
         let params = {};
         
@@ -422,10 +421,17 @@ if (progress <= 1.0) {
             params[msg.args[i]] = msg.args[i+1];
         }
         
+        // 🐛 DEBUG: Mostrar qué sonido llegó
+        console.log('Mensaje OSC recibido:', msg);
+        console.log('  → Sound:', params.s);
+        console.log('  → Note:', params.note || params.n);
+        console.log('  → Delta:', params.delta);
+        console.log('  → Params completos:', params);
+        
         // Agregar evento a la cola
         eventQueue.push({ 
           timestamp: msg.timestamp, 
-          sound: params.s,
+          sound: params.s || 'unknown', // Valor por defecto si s es undefined
           note: params.note || params.n || 0,
           delta: params.delta || 0.25,
           gain: params.gain || 0.5,
@@ -517,7 +523,9 @@ if (progress <= 1.0) {
     pop();
   }
 
+  // ========================================
   // FUNCIONES DE DIBUJO ESPECÍFICAS
+  // ========================================
 
   // P1: Synth con distorsión - Ondas orgánicas que vibran
   function dibujarSawtoothDistort(anim, p, c) {
@@ -624,7 +632,7 @@ if (progress <= 1.0) {
     line(anim.x, height - margin, anim.x, height - margin - len);
   }
 
-  // P4: Clap - Ondas de choque concéntricas
+  // 👏 P4: Clap - Ondas de choque concéntricas
   function dibujarClap(anim, p, c) {
     noFill();
     
@@ -644,7 +652,7 @@ if (progress <= 1.0) {
     }
   }
 
-  // Default: Para sonidos no mapeados
+  // 🔷 Default: Para sonidos no mapeados
   function dibujarDefault(anim, p, c) {
     let size = lerp(100, 0, p);
     let alpha = lerp(200, 0, p);
@@ -659,9 +667,16 @@ if (progress <= 1.0) {
     text(anim.type, anim.x, anim.y - size/2 - 10);
   }
 
+  // ========================================
   // SISTEMA DE COLORES
+  // ========================================
 
   function getColorForSound(s, note = 0) {
+    // Verificar que s sea válido
+    if (!s || s === undefined || s === null) {
+      return [150, 150, 150]; // Gris por defecto
+    }
+
     const colors = {
       // P1: Synth - Colores cálidos que varían con la nota
       'sawtooth': [255 - note * 10, 100 + note * 5, 180],
@@ -681,14 +696,16 @@ if (progress <= 1.0) {
     if (colors[s]) return colors[s];
 
     // Fallback: color basado en el nombre del sonido
-    let charCode = s.charCodeAt(0) || 0;
+    let charCode = s.charCodeAt(0) || 65; // 'A' por defecto
     let r = (charCode * 123) % 255;
     let g = (charCode * 456) % 255;
     let b = (charCode * 789) % 255;
     return [r, g, b];
   }
 
+  // ========================================
   // UTILIDADES
+  // ========================================
 
   function updateUI() {
     // Actualizar información en pantalla
@@ -732,6 +749,7 @@ p4: sound("[bd*4,~ rim ~ cp]*<1 [2 4]>")
 
 
 ## Bitácora de reflexión
+
 
 
 
