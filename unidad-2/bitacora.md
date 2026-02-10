@@ -353,15 +353,41 @@ if (progress <= 1.0) {
 <!DOCTYPE html>
 <html>
 <head>
+  <meta charset="UTF-8">
+  <title>Visuales Reactivas - Pieza de Audio Interactivo</title>
   <script src="https://cdn.jsdelivr.net/npm/p5@1.11.11/lib/p5.min.js"></script>
-  <style> body { margin: 0; overflow: hidden; background: black; } </style>
+  <style> 
+    body { 
+      margin: 0; 
+      overflow: hidden; 
+      background: black; 
+      font-family: monospace;
+    } 
+    #info {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      color: white;
+      font-size: 12px;
+      background: rgba(0,0,0,0.5);
+      padding: 10px;
+      border-radius: 5px;
+      pointer-events: none;
+    }
+  </style>
 </head>
 <body>
-<script>
+  <div id="info">
+    <div>🎵 Pieza de Audio Interactivo con Visuales Reactivas</div>
+    <div>Conexión OSC: <span id="status">Esperando...</span></div>
+    <div>Eventos activos: <span id="active">0</span></div>
+  </div>
 
+<script>
   let eventQueue = [];
   let activeAnimations = [];
-  const LATENCY_CORRECTION = 0;
+  const LATENCY_CORRECTION = 0; // Ajuste fino en ms
+  let connectionStatus = "Esperando...";
 
   function setup() {
     createCanvas(windowWidth, windowHeight);
@@ -370,176 +396,309 @@ if (progress <= 1.0) {
 
     const socket = new WebSocket('ws://localhost:8081');
 
+    socket.onopen = () => {
+      connectionStatus = "✅ Conectado";
+      console.log('WebSocket conectado');
+    };
+
+    socket.onerror = (error) => {
+      connectionStatus = "❌ Error de conexión";
+      console.error('Error WebSocket:', error);
+    };
+
+    socket.onclose = () => {
+      connectionStatus = "⚠️ Desconectado";
+      console.log('WebSocket cerrado');
+    };
+
     socket.onmessage = (event) => {
         const msg = JSON.parse(event.data);
         console.log('Mensaje OSC recibido:', msg);
         
         let params = {};
+        
+        // Parsear los argumentos OSC
         for (let i = 0; i < msg.args.length; i += 2) {
             params[msg.args[i]] = msg.args[i+1];
         }
         
+        // Agregar evento a la cola
         eventQueue.push({ 
           timestamp: msg.timestamp, 
           sound: params.s,
+          note: params.note || params.n || 0,
           delta: params.delta || 0.25,
+          gain: params.gain || 0.5,
           params: params 
         });
 
+        // Ordenar por timestamp
         eventQueue.sort((a, b) => a.timestamp - b.timestamp);
     };
   }
 
   function draw() {
-    background(0, 30); 
+    // Fondo con trail suave
+    background(0, 40);
 
     let now = Date.now() + LATENCY_CORRECTION;
 
+    // Procesar eventos cuyo tiempo ha llegado
     while (eventQueue.length > 0 && now >= eventQueue[0].timestamp) {
         let ev = eventQueue.shift();
 
-        // MODIFICACIÓN: Generamos múltiples partículas por evento
-        let particleCount = getParticleCount(ev.sound);
-        
-        for (let i = 0; i < particleCount; i++) {
-          let angle = (TWO_PI / particleCount) * i; // Distribuir en círculo
-          
-          activeAnimations.push({
-            startTime: ev.timestamp,
-            duration: ev.delta * 1000,
-            type: ev.sound,
-            // Posición inicial en el centro
-            startX: width / 2,
-            startY: height / 2,
-            // Dirección de movimiento
-            angle: angle,
-            speed: getSpeed(ev.sound),
-            color: getColorForSound(ev.sound),
-            particleIndex: i // Para variaciones
-          });
-        }
+        // Crear nueva animación
+        activeAnimations.push({
+          startTime: ev.timestamp,
+          duration: ev.delta * 1000, // Convertir a milisegundos
+          type: ev.sound,
+          note: ev.note,
+          gain: ev.gain,
+          x: random(width * 0.2, width * 0.8), 
+          y: random(height * 0.2, height * 0.8),
+          color: getColorForSound(ev.sound, ev.note)
+        });
     }
     
+    // Dibujar todas las animaciones activas
     for (let i = activeAnimations.length - 1; i >= 0; i--) {
       let anim = activeAnimations[i];
+      
+      // Calcular progreso (0.0 → 1.0)
       let elapsed = now - anim.startTime;
       let progress = elapsed / anim.duration;
 
       if (progress <= 1.0) {
         dibujarElemento(anim, progress);
       } else {
+        // Eliminar animación completada
         activeAnimations.splice(i, 1);
       }
     }
-  }
 
-  // FUNCIÓN: Define cuántas partículas genera cada sonido
-  function getParticleCount(sound) {
-    const counts = {
-      'tr909bd': 8,   // Bombo: 8 partículas
-      'tr909sd': 12,  // Caja: 12 partículas
-      'tr909hh': 6,   // Hi-hat cerrado: 6 partículas
-      'tr909oh': 10   // Hi-hat abierto: 10 partículas
-    };
-    return counts[sound] || 8;
-  }
-
-  // FUNCIÓN: Define la velocidad de expansión
-  function getSpeed(sound) {
-    const speeds = {
-      'tr909bd': 200,  // Bombo: expansión lenta y pesada
-      'tr909sd': 350,  // Caja: expansión rápida
-      'tr909hh': 150,  // Hi-hat: expansión corta
-      'tr909oh': 180   // Open hat: expansión media
-    };
-    return speeds[sound] || 200;
+    // Actualizar UI
+    updateUI();
   }
 
   function dibujarElemento(anim, p) {
     push();
-    
-    // CALCULAR POSICIÓN ACTUAL basada en el ángulo y progreso
-    let distance = anim.speed * p; // La distancia aumenta con el tiempo
-    let x = anim.startX + cos(anim.angle) * distance;
-    let y = anim.startY + sin(anim.angle) * distance;
-    
     const color = anim.color;
     
+    // Seleccionar función de dibujo según el tipo de sonido
     switch (anim.type) {
-      case 'tr909bd':
-        dibujarParticulaBombo(x, y, p, color);
+      case 'sawtooth': // P1: synth con distorsión
+        dibujarSawtoothDistort(anim, p, color);
         break;
 
-      case 'tr909sd':
-        dibujarParticulaCaja(x, y, p, color);
+      case 'clip': // P2: clip agresivo
+        dibujarClip(anim, p, color);
         break;
 
-      case 'tr909hh':
-      case 'tr909oh':
-        dibujarParticulaHat(x, y, p, color, anim.particleIndex);
+      case 'piano': // P3: piano melódico
+        dibujarPiano(anim, p, color);
+        break;
+
+      case 'bd': // P4: bombo
+        dibujarBombo(p, color);
+        break;
+
+      case 'rim': // P4: rim shot
+        dibujarRim(anim, p, color);
+        break;
+
+      case 'cp': // P4: clap/palmada
+        dibujarClap(anim, p, color);
         break;
 
       default:
-        dibujarParticulaDefault(x, y, p, color);
+        dibujarDefault(anim, p, color);
         break;
     }
     pop();
   }
 
-  // FUNCIONES DE DIBUJO MODIFICADAS
-  function dibujarParticulaBombo(x, y, p, c) {
-    // Círculos que se expanden y desvanecen
-    let size = lerp(30, 60, p);
-    let alpha = lerp(255, 0, p);
-    fill(c[0], c[1], c[2], alpha);
-    circle(x, y, size);
-  }
+  // FUNCIONES DE DIBUJO ESPECÍFICAS
 
-  function dibujarParticulaCaja(x, y, p, c) {
-    // Cuadrados que rotan mientras se expanden
-    let size = lerp(20, 5, p);
-    let alpha = lerp(255, 0, p);
-    let rotation = p * TWO_PI * 2; // Rotación doble
+  // P1: Synth con distorsión - Ondas orgánicas que vibran
+  function dibujarSawtoothDistort(anim, p, c) {
+    // Posición basada en la nota (más agudo = más arriba)
+    let yPos = map(anim.note, 0, 12, height * 0.7, height * 0.3);
+    let xPos = width / 2;
     
-    translate(x, y);
-    rotate(rotation);
-    fill(c[0], c[1], c[2], alpha);
-    rect(0, 0, size, size);
-  }
-
-  function dibujarParticulaHat(x, y, p, c, index) {
-    // Líneas que se alargan
-    let len = lerp(5, 30, p);
-    let alpha = lerp(255, 0, p);
+    // Efecto de distorsión: el tamaño vibra rápidamente
+    let distortion = sin(p * TWO_PI * 8) * 10; // Vibración rápida
+    let size = lerp(150, 50, p) + distortion;
     
+    let alpha = lerp(200, 0, p);
+    
+    noFill();
     stroke(c[0], c[1], c[2], alpha);
-    strokeWeight(2);
-    line(x - len/2, y, x + len/2, y);
+    strokeWeight(3);
+    
+    // Múltiples círculos concéntricos (efecto superimpose/detune)
+    for (let i = 0; i < 3; i++) {
+      let offset = i * 15;
+      circle(xPos + offset, yPos, size + offset);
+    }
   }
 
-  function dibujarParticulaDefault(x, y, p, c) {
-    let size = lerp(25, 0, p);
+  // P2: Clip - Explosión fragmentada
+  function dibujarClip(anim, p, c) {
+    // El clip crea formas fragmentadas y agresivas
+    let alpha = lerp(255, 0, p);
+    fill(c[0], c[1], c[2], alpha);
+    
+    // Fragmentos que explotan desde el centro
+    let fragments = 8;
+    for (let i = 0; i < fragments; i++) {
+      let angle = (TWO_PI / fragments) * i;
+      let distance = lerp(0, 200, p);
+      let x = width / 2 + cos(angle) * distance;
+      let y = height / 2 + sin(angle) * distance;
+      let size = lerp(30, 5, p);
+      
+      push();
+      translate(x, y);
+      rotate(angle + p * PI);
+      rect(0, 0, size, size * 2);
+      pop();
+    }
+  }
+
+  // P3: Piano - Notas que caen y rebotan
+  function dibujarPiano(anim, p, c) {
+    // Altura basada en la nota musical
+    let noteHeight = map(anim.note, 0, 12, height * 0.8, height * 0.2);
+    
+    // Animación de "caída" y rebote (3 rebotes durante el delta)
+    let bounce = abs(sin(p * PI * 3)) * 20;
+    let yPos = noteHeight + bounce;
+    
+    // Tamaño basado en el gain
+    let size = anim.gain * 150;
+    let currentSize = lerp(size, size * 0.3, p);
+    let alpha = lerp(220, 0, p);
+    
+    fill(c[0], c[1], c[2], alpha);
+    
+    // Forma de tecla de piano
+    rectMode(CORNER);
+    rect(anim.x - currentSize/2, yPos, currentSize, currentSize * 0.3, 5);
+    rectMode(CENTER);
+    
+    // Onda de sonido expandiéndose
+    noFill();
+    stroke(c[0], c[1], c[2], alpha * 0.5);
+    strokeWeight(2);
+    let waveSize = lerp(0, 300, p);
+    circle(anim.x, yPos, waveSize);
+  }
+
+  // P4: Bombo - Pulso central potente
+  function dibujarBombo(p, c) {
+    // Pulso fuerte desde el centro
+    let d = lerp(100, 700, p);
+    let alpha = lerp(255, 0, p);
+    
+    // Doble círculo para efecto más potente
+    fill(c[0], c[1], c[2], alpha * 0.3);
+    circle(width / 2, height / 2, d * 1.2);
+    
+    fill(c[0], c[1], c[2], alpha);
+    circle(width / 2, height / 2, d);
+  }
+
+  // P4: Rim - Destello en los bordes
+  function dibujarRim(anim, p, c) {
+    let alpha = lerp(255, 0, p);
+    strokeWeight(lerp(10, 2, p));
+    stroke(c[0], c[1], c[2], alpha);
+    
+    // Líneas en los bordes de la pantalla
+    let margin = 50;
+    let len = lerp(0, 200, p);
+    
+    // Borde superior
+    line(anim.x, margin, anim.x, margin + len);
+    // Efecto espejo abajo
+    line(anim.x, height - margin, anim.x, height - margin - len);
+  }
+
+  // P4: Clap - Ondas de choque concéntricas
+  function dibujarClap(anim, p, c) {
+    noFill();
+    
+    // Múltiples ondas expandiéndose (4 ondas escalonadas)
+    for (let i = 0; i < 4; i++) {
+      let delay = i * 0.15; // Ondas escalonadas
+      let adjustedP = constrain(p - delay, 0, 1);
+      
+      if (adjustedP > 0) {
+        let size = lerp(50, 400, adjustedP);
+        let alpha = lerp(200, 0, adjustedP);
+        
+        stroke(c[0], c[1], c[2], alpha);
+        strokeWeight(3);
+        circle(anim.x, anim.y, size);
+      }
+    }
+  }
+
+  // Default: Para sonidos no mapeados
+  function dibujarDefault(anim, p, c) {
+    let size = lerp(100, 0, p);
     let alpha = lerp(200, 0, p);
     fill(c[0], c[1], c[2], alpha);
-    circle(x, y, size);
+    circle(anim.x, anim.y, size);
+    
+    // Mostrar nombre del sonido para debug
+    fill(255, 150);
+    noStroke();
+    textSize(12);
+    textAlign(CENTER);
+    text(anim.type, anim.x, anim.y - size/2 - 10);
   }
 
-  function getColorForSound(s) {
+  // SISTEMA DE COLORES
+
+  function getColorForSound(s, note = 0) {
     const colors = {
-      'tr909bd': [255, 0, 80],
-      'tr909sd': [0, 200, 255],
-      'tr909hh': [255, 255, 0],
-      'tr909oh': [255, 150, 0]
+      // P1: Synth - Colores cálidos que varían con la nota
+      'sawtooth': [255 - note * 10, 100 + note * 5, 180],
+      
+      // P2: Clip - Rojo agresivo
+      'clip': [255, 50, 50],
+      
+      // P3: Piano - Azul/Púrpura melódico que varía con la nota
+      'piano': [100 + note * 12, 150, 255 - note * 8],
+      
+      // P4: Percusión
+      'bd': [255, 0, 80],      // Bombo - Rosa fuerte
+      'rim': [0, 255, 200],    // Rim - Cyan brillante
+      'cp': [255, 200, 0]      // Clap - Amarillo dorado
     };
+
     if (colors[s]) return colors[s];
+
+    // Fallback: color basado en el nombre del sonido
     let charCode = s.charCodeAt(0) || 0;
     let r = (charCode * 123) % 255;
     let g = (charCode * 456) % 255;
     let b = (charCode * 789) % 255;
     return [r, g, b];
-  }  
+  }
 
-  function windowResized() { resizeCanvas(windowWidth, windowHeight); }
+  // UTILIDADES
+
+  function updateUI() {
+    // Actualizar información en pantalla
+    document.getElementById('status').textContent = connectionStatus;
+    document.getElementById('active').textContent = activeAnimations.length;
+  }
+
+  function windowResized() { 
+    resizeCanvas(windowWidth, windowHeight); 
+  }
 
 </script>
 </body>
@@ -573,6 +732,7 @@ p4: sound("[bd*4,~ rim ~ cp]*<1 [2 4]>")
 
 
 ## Bitácora de reflexión
+
 
 
 
