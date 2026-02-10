@@ -65,6 +65,10 @@ let progress = elapsed / anim.duration; // 0.0 → 1.0
 
 ### Actividad 03:
 
+<img width="578" height="380" alt="Captura de pantalla 2026-02-08 a la(s) 9 46 29 p m" src="https://github.com/user-attachments/assets/ae9e907a-e44d-4708-9512-096913bf9e13" />
+<img width="578" height="378" alt="Captura de pantalla 2026-02-08 a la(s) 9 46 36 p m" src="https://github.com/user-attachments/assets/efd4d16e-514d-4772-b21b-b010b3f00708" />
+![Grabación-de-pantalla-2026-02-08-a-la_s_-9 48 40 p m](https://github.com/user-attachments/assets/e83b981b-ada8-4b9c-a3b7-e0914cbbcc2c)
+
 ## Bitácora de aplicación 
 
 ### Actividad 04: 10/02/2026
@@ -339,10 +343,7 @@ if (progress <= 1.0) {
 
 #### Capturas de Pantalla
 
-<img width="578" height="380" alt="Captura de pantalla 2026-02-08 a la(s) 9 46 29 p m" src="https://github.com/user-attachments/assets/ae9e907a-e44d-4708-9512-096913bf9e13" />
-<img width="578" height="378" alt="Captura de pantalla 2026-02-08 a la(s) 9 46 36 p m" src="https://github.com/user-attachments/assets/efd4d16e-514d-4772-b21b-b010b3f00708" />
 
-![Grabación-de-pantalla-2026-02-08-a-la_s_-9 48 40 p m](https://github.com/user-attachments/assets/e83b981b-ada8-4b9c-a3b7-e0914cbbcc2c)
 
 #### Código Completo
 
@@ -572,6 +573,7 @@ p4: sound("[bd*4,~ rim ~ cp]*<1 [2 4]>")
 
 
 ## Bitácora de reflexión
+
 
 
 
