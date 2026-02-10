@@ -361,33 +361,15 @@ if (progress <= 1.0) {
       margin: 0; 
       overflow: hidden; 
       background: black; 
-      font-family: monospace;
     } 
-    #info {
-      position: absolute;
-      top: 10px;
-      left: 10px;
-      color: white;
-      font-size: 12px;
-      background: rgba(0,0,0,0.5);
-      padding: 10px;
-      border-radius: 5px;
-      pointer-events: none;
-    }
   </style>
 </head>
 <body>
-  <div id="info">
-    <div>🎵 Pieza de Audio Interactivo con Visuales Reactivas</div>
-    <div>Conexión OSC: <span id="status">Esperando...</span></div>
-    <div>Eventos activos: <span id="active">0</span></div>
-  </div>
 
 <script>
   let eventQueue = [];
   let activeAnimations = [];
-  const LATENCY_CORRECTION = 0; // Ajuste fino en ms
-  let connectionStatus = "Esperando...";
+  const LATENCY_CORRECTION = 0;
 
   function setup() {
     createCanvas(windowWidth, windowHeight);
@@ -397,18 +379,11 @@ if (progress <= 1.0) {
     const socket = new WebSocket('ws://localhost:8081');
 
     socket.onopen = () => {
-      connectionStatus = "✅ Conectado";
-      console.log('WebSocket conectado');
+      console.log('✅ WebSocket conectado');
     };
 
     socket.onerror = (error) => {
-      connectionStatus = "❌ Error de conexión";
-      console.error('Error WebSocket:', error);
-    };
-
-    socket.onclose = () => {
-      connectionStatus = "⚠️ Desconectado";
-      console.log('WebSocket cerrado');
+      console.error('❌ Error WebSocket:', error);
     };
 
     socket.onmessage = (event) => {
@@ -416,47 +391,40 @@ if (progress <= 1.0) {
         
         let params = {};
         
-        // Parsear los argumentos OSC
+        // Parsear argumentos OSC
         for (let i = 0; i < msg.args.length; i += 2) {
             params[msg.args[i]] = msg.args[i+1];
         }
         
-        // 🐛 DEBUG: Mostrar qué sonido llegó
-        console.log('Mensaje OSC recibido:', msg);
-        console.log('  → Sound:', params.s);
-        console.log('  → Note:', params.note || params.n);
-        console.log('  → Delta:', params.delta);
-        console.log('  → Params completos:', params);
+        // Log simplificado
+        console.log('🎵', params.s || 'unknown', '| note:', params.n || params.note);
         
-        // Agregar evento a la cola
+        // Crear evento
         eventQueue.push({ 
           timestamp: msg.timestamp, 
-          sound: params.s || 'unknown', // Valor por defecto si s es undefined
+          sound: params.s || 'unknown',
           note: params.note || params.n || 0,
           delta: params.delta || 0.25,
           gain: params.gain || 0.5,
           params: params 
         });
 
-        // Ordenar por timestamp
         eventQueue.sort((a, b) => a.timestamp - b.timestamp);
     };
   }
 
   function draw() {
-    // Fondo con trail suave
-    background(0, 40);
+    background(0, 40); // Trail suave
 
     let now = Date.now() + LATENCY_CORRECTION;
 
-    // Procesar eventos cuyo tiempo ha llegado
+    // Procesar eventos
     while (eventQueue.length > 0 && now >= eventQueue[0].timestamp) {
         let ev = eventQueue.shift();
 
-        // Crear nueva animación
         activeAnimations.push({
           startTime: ev.timestamp,
-          duration: ev.delta * 1000, // Convertir a milisegundos
+          duration: ev.delta * 1000,
           type: ev.sound,
           note: ev.note,
           gain: ev.gain,
@@ -466,54 +434,62 @@ if (progress <= 1.0) {
         });
     }
     
-    // Dibujar todas las animaciones activas
+    // Dibujar animaciones
     for (let i = activeAnimations.length - 1; i >= 0; i--) {
       let anim = activeAnimations[i];
-      
-      // Calcular progreso (0.0 → 1.0)
       let elapsed = now - anim.startTime;
       let progress = elapsed / anim.duration;
 
       if (progress <= 1.0) {
         dibujarElemento(anim, progress);
       } else {
-        // Eliminar animación completada
         activeAnimations.splice(i, 1);
       }
     }
-
-    // Actualizar UI
-    updateUI();
   }
 
   function dibujarElemento(anim, p) {
     push();
     const color = anim.color;
     
-    // Seleccionar función de dibujo según el tipo de sonido
+    // Mapear sonidos específicos
     switch (anim.type) {
-      case 'sawtooth': // P1: synth con distorsión
+      case 'sawtooth':
         dibujarSawtoothDistort(anim, p, color);
         break;
 
-      case 'clip': // P2: clip agresivo
+      case 'square':
+      case 'clip':
         dibujarClip(anim, p, color);
         break;
 
-      case 'piano': // P3: piano melódico
+      case 'piano':
         dibujarPiano(anim, p, color);
         break;
 
-      case 'bd': // P4: bombo
+      case 'bd':
+      case '909bd':
         dibujarBombo(p, color);
         break;
 
-      case 'rim': // P4: rim shot
+      case 'rim':
+      case '909rim':
         dibujarRim(anim, p, color);
         break;
 
-      case 'cp': // P4: clap/palmada
+      case 'cp':
+      case '909cp':
         dibujarClap(anim, p, color);
+        break;
+
+      case 'hh':
+      case '909hh':
+        dibujarHat(anim, p, color);
+        break;
+
+      case 'sd':
+      case '909sd':
+        dibujarCaja(p, color);
         break;
 
       default:
@@ -524,39 +500,34 @@ if (progress <= 1.0) {
   }
 
   // ========================================
-  // FUNCIONES DE DIBUJO ESPECÍFICAS
+  // FUNCIONES VISUALES ESPECÍFICAS
   // ========================================
 
-  // P1: Synth con distorsión - Ondas orgánicas que vibran
   function dibujarSawtoothDistort(anim, p, c) {
-    // Posición basada en la nota (más agudo = más arriba)
     let yPos = map(anim.note, 0, 12, height * 0.7, height * 0.3);
     let xPos = width / 2;
     
-    // Efecto de distorsión: el tamaño vibra rápidamente
-    let distortion = sin(p * TWO_PI * 8) * 10; // Vibración rápida
+    // Vibración por distorsión
+    let distortion = sin(p * TWO_PI * 8) * 10;
     let size = lerp(150, 50, p) + distortion;
-    
     let alpha = lerp(200, 0, p);
     
     noFill();
     stroke(c[0], c[1], c[2], alpha);
     strokeWeight(3);
     
-    // Múltiples círculos concéntricos (efecto superimpose/detune)
+    // Múltiples círculos (superimpose)
     for (let i = 0; i < 3; i++) {
       let offset = i * 15;
       circle(xPos + offset, yPos, size + offset);
     }
   }
 
-  // P2: Clip - Explosión fragmentada
   function dibujarClip(anim, p, c) {
-    // El clip crea formas fragmentadas y agresivas
     let alpha = lerp(255, 0, p);
     fill(c[0], c[1], c[2], alpha);
     
-    // Fragmentos que explotan desde el centro
+    // Fragmentos que explotan
     let fragments = 8;
     for (let i = 0; i < fragments; i++) {
       let angle = (TWO_PI / fragments) * i;
@@ -573,28 +544,23 @@ if (progress <= 1.0) {
     }
   }
 
-  // P3: Piano - Notas que caen y rebotan
   function dibujarPiano(anim, p, c) {
-    // Altura basada en la nota musical
     let noteHeight = map(anim.note, 0, 12, height * 0.8, height * 0.2);
-    
-    // Animación de "caída" y rebote (3 rebotes durante el delta)
     let bounce = abs(sin(p * PI * 3)) * 20;
     let yPos = noteHeight + bounce;
     
-    // Tamaño basado en el gain
     let size = anim.gain * 150;
     let currentSize = lerp(size, size * 0.3, p);
     let alpha = lerp(220, 0, p);
     
     fill(c[0], c[1], c[2], alpha);
     
-    // Forma de tecla de piano
+    // Tecla de piano
     rectMode(CORNER);
     rect(anim.x - currentSize/2, yPos, currentSize, currentSize * 0.3, 5);
     rectMode(CENTER);
     
-    // Onda de sonido expandiéndose
+    // Onda expandiéndose
     noFill();
     stroke(c[0], c[1], c[2], alpha * 0.5);
     strokeWeight(2);
@@ -602,13 +568,11 @@ if (progress <= 1.0) {
     circle(anim.x, yPos, waveSize);
   }
 
-  // P4: Bombo - Pulso central potente
   function dibujarBombo(p, c) {
-    // Pulso fuerte desde el centro
     let d = lerp(100, 700, p);
     let alpha = lerp(255, 0, p);
     
-    // Doble círculo para efecto más potente
+    // Doble círculo
     fill(c[0], c[1], c[2], alpha * 0.3);
     circle(width / 2, height / 2, d * 1.2);
     
@@ -616,29 +580,32 @@ if (progress <= 1.0) {
     circle(width / 2, height / 2, d);
   }
 
-  // P4: Rim - Destello en los bordes
+  function dibujarCaja(p, c) {
+    let w = lerp(width, 0, p);
+    let alpha = lerp(255, 0, p);
+    fill(c[0], c[1], c[2], alpha);
+    rect(width / 2, height / 2, w, 50);
+  }
+
   function dibujarRim(anim, p, c) {
     let alpha = lerp(255, 0, p);
     strokeWeight(lerp(10, 2, p));
     stroke(c[0], c[1], c[2], alpha);
     
-    // Líneas en los bordes de la pantalla
     let margin = 50;
     let len = lerp(0, 200, p);
     
-    // Borde superior
+    // Líneas en bordes
     line(anim.x, margin, anim.x, margin + len);
-    // Efecto espejo abajo
     line(anim.x, height - margin, anim.x, height - margin - len);
   }
 
-  // 👏 P4: Clap - Ondas de choque concéntricas
   function dibujarClap(anim, p, c) {
     noFill();
     
-    // Múltiples ondas expandiéndose (4 ondas escalonadas)
+    // Ondas concéntricas
     for (let i = 0; i < 4; i++) {
-      let delay = i * 0.15; // Ondas escalonadas
+      let delay = i * 0.15;
       let adjustedP = constrain(p - delay, 0, 1);
       
       if (adjustedP > 0) {
@@ -652,19 +619,19 @@ if (progress <= 1.0) {
     }
   }
 
-  // 🔷 Default: Para sonidos no mapeados
+  function dibujarHat(anim, p, c) {
+    let sz = lerp(40, 0, p);
+    let alpha = lerp(255, 0, p);
+    fill(c[0], c[1], c[2], alpha);
+    rect(anim.x, anim.y, sz, sz);
+  }
+
   function dibujarDefault(anim, p, c) {
-    let size = lerp(100, 0, p);
+    // Círculo simple para sonidos no mapeados
+    let size = lerp(150, 0, p);
     let alpha = lerp(200, 0, p);
     fill(c[0], c[1], c[2], alpha);
     circle(anim.x, anim.y, size);
-    
-    // Mostrar nombre del sonido para debug
-    fill(255, 150);
-    noStroke();
-    textSize(12);
-    textAlign(CENTER);
-    text(anim.type, anim.x, anim.y - size/2 - 10);
   }
 
   // ========================================
@@ -672,45 +639,37 @@ if (progress <= 1.0) {
   // ========================================
 
   function getColorForSound(s, note = 0) {
-    // Verificar que s sea válido
-    if (!s || s === undefined || s === null) {
-      return [150, 150, 150]; // Gris por defecto
-    }
+    if (!s) return [150, 150, 150];
 
     const colors = {
-      // P1: Synth - Colores cálidos que varían con la nota
       'sawtooth': [255 - note * 10, 100 + note * 5, 180],
-      
-      // P2: Clip - Rojo agresivo
+      'square': [255, 50, 50],
       'clip': [255, 50, 50],
-      
-      // P3: Piano - Azul/Púrpura melódico que varía con la nota
       'piano': [100 + note * 12, 150, 255 - note * 8],
-      
-      // P4: Percusión
-      'bd': [255, 0, 80],      // Bombo - Rosa fuerte
-      'rim': [0, 255, 200],    // Rim - Cyan brillante
-      'cp': [255, 200, 0]      // Clap - Amarillo dorado
+      'bd': [255, 0, 80],
+      '909bd': [255, 0, 80],
+      'sd': [0, 200, 255],
+      '909sd': [0, 200, 255],
+      'rim': [0, 255, 200],
+      '909rim': [0, 255, 200],
+      'cp': [255, 200, 0],
+      '909cp': [255, 200, 0],
+      'hh': [255, 255, 100],
+      '909hh': [255, 255, 100],
+      'unknown': [150, 100, 150]
     };
 
     if (colors[s]) return colors[s];
 
-    // Fallback: color basado en el nombre del sonido
-    let charCode = s.charCodeAt(0) || 65; // 'A' por defecto
-    let r = (charCode * 123) % 255;
-    let g = (charCode * 456) % 255;
-    let b = (charCode * 789) % 255;
+    // Color basado en hash del nombre
+    let hash = 0;
+    for (let i = 0; i < s.length; i++) {
+      hash = s.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    let r = Math.abs(hash % 255);
+    let g = Math.abs((hash * 123) % 255);
+    let b = Math.abs((hash * 456) % 255);
     return [r, g, b];
-  }
-
-  // ========================================
-  // UTILIDADES
-  // ========================================
-
-  function updateUI() {
-    // Actualizar información en pantalla
-    document.getElementById('status').textContent = connectionStatus;
-    document.getElementById('active').textContent = activeAnimations.length;
   }
 
   function windowResized() { 
@@ -749,6 +708,7 @@ p4: sound("[bd*4,~ rim ~ cp]*<1 [2 4]>")
 
 
 ## Bitácora de reflexión
+
 
 
 
