@@ -730,3 +730,4 @@ Luego, Node Bridge.js recibe la información de Strudel mediante websockets por 
 
 
 
+
