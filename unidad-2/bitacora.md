@@ -685,25 +685,33 @@ if (progress <= 1.0) {
 ```javascript
 setcps(0.7);
 
-p1: n("0 2 4 6 7 6 4 2")
+let p1 = n("0 2 4 6 7 6 4 2")
   .scale("<c3:major>")
   .distort(0.9)
   .superimpose((x) => x.detune("<0.5>"))
   .lpenv(perlin.slow(3).range(1, 4))
   .lpf(perlin.slow(2).range(100, 2000))
-  .gain(0.3)
-  .osc(); 
+  .gain(0.3);
 
-p2: "<a1>/8".clip(0.8).struct("x*8").note()
-  .osc();
+let p2 = "<a1>/8".clip(0.8).struct("x*8").note();
 
-p3: n("0@3 2 4 <[6,8] [7,9]>")
+let p3 = n ("0@3 2 4 <[6,8] [7,9]>")
   .scale("C:minor")
-  .sound("piano")
-  .osc();
+  .sound("piano");
 
-p4: sound("[bd*4,~ rim ~ cp]*<1 [2 4]>")
-  .osc();
+let p4 = sound("[bd*4,~ rim ~ cp]*<1 [2 4]>");
+
+$: stack (
+  p1,
+  p2,
+  p3,
+  p4,
+
+  p1.osc,
+  p2.osc,
+  p3.osc,
+  p4.osc
+)
 ```
 
 ## Bitácora de reflexión
@@ -711,6 +719,7 @@ p4: sound("[bd*4,~ rim ~ cp]*<1 [2 4]>")
 <img width="877" height="458" alt="Captura de pantalla 2026-02-12 a la(s) 8 37 25 a m" src="https://github.com/user-attachments/assets/fe8d6724-7153-485b-aec9-a6420a3c2404" />
 
 A través del puerto 4321, el servidor envía información a Reepl  (Strudel) para el audio, y a las Visuales (p5.js). Luego, el Node Bridge.js a través del puerto 8080, recibe la información de strudel en websockets, y la envía por el puerto 8081 a las visuales.A través del puerto 4321, el servidor envía información a Reepl  (Strudel) para el audio, y a las Visuales (p5.js). Luego, el Node Bridge.js a través del puerto 8080, recibe la información de strudel en websockets, y la envía por el puerto 8081 a las visuales.
+
 
 
 
