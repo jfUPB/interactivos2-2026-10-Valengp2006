@@ -718,7 +718,9 @@ $: stack (
 
 <img width="877" height="458" alt="Captura de pantalla 2026-02-12 a la(s) 8 37 25 a m" src="https://github.com/user-attachments/assets/fe8d6724-7153-485b-aec9-a6420a3c2404" />
 
-A través del puerto 4321, el servidor envía información a Reepl  (Strudel) para el audio, y a las Visuales (p5.js). Luego, el Node Bridge.js a través del puerto 8080, recibe la información de strudel en websockets, y la envía por el puerto 8081 a las visuales.A través del puerto 4321, el servidor envía información a Reepl  (Strudel) para el audio, y a las Visuales (p5.js). Luego, el Node Bridge.js a través del puerto 8080, recibe la información de strudel en websockets, y la envía por el puerto 8081 a las visuales.
+A través del puerto 4321, el servidor HTTP envía información tanto a Reepl/Strudel (audio) como a las aplicaciones visuales en p5.js (Chrome).
+
+Luego, Node Bridge.js recibe la información de Strudel mediante websockets por el puerto 8080 y la reenvía a las visuales a través del puerto 8081, permitiendo la comunicación entre el sistema de audio y las visuales.
 
 
 
