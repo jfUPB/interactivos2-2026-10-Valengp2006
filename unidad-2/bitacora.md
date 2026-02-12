@@ -695,22 +695,23 @@ let p1 = n("0 2 4 6 7 6 4 2")
 
 let p2 = "<a1>/8".clip(0.8).struct("x*8").note();
 
-let p3 = n ("0@3 2 4 <[6,8] [7,9]>")
+let p3 = n("0@3 2 4 <[6,8] [7,9]>")
   .scale("C:minor")
   .sound("piano");
 
 let p4 = sound("[bd*4,~ rim ~ cp]*<1 [2 4]>");
 
 $: stack (
+
   p1,
   p2,
   p3,
   p4,
 
-  p1.osc,
-  p2.osc,
-  p3.osc,
-  p4.osc
+  p1.osc(),
+  p2.osc(),
+  p3.osc(),
+  p4.osc()
 )
 ```
 
@@ -721,6 +722,7 @@ $: stack (
 A través del puerto 4321, el servidor HTTP envía información tanto a Reepl/Strudel (audio) como a las aplicaciones visuales en p5.js (Chrome).
 
 Luego, Node Bridge.js recibe la información de Strudel mediante websockets por el puerto 8080 y la reenvía a las visuales a través del puerto 8081, permitiendo la comunicación entre el sistema de audio y las visuales.
+
 
 
 
