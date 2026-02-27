@@ -162,3 +162,9 @@ oscServer.on('message', (msg) => {
 
 ## Bitácora de reflexión
 
+### Actividad 05
+
+<img width="836" height="441" alt="Captura de pantalla 2026-02-26 a la(s) 8 37 50 p m" src="https://github.com/user-attachments/assets/573a3321-253e-4487-9de8-e45e58ae05b1" />
+
+El sistema ahora tiene dos flujos: uno para los eventos de audio y otro para los parámetros de control. Strudel envía el audio a través de bridge.js, mientras que Open Stage Control envía los parámetros a bridgeUI.js. Ambos llegan al navegador por diferentes puertos, lo que permite controlar el sonido en tiempo real de forma organizada y modular.
+
