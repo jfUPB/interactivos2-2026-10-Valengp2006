@@ -158,7 +158,106 @@ oscServer.on('message', (msg) => {
 
 ### Actividad 03
 
+#### ¿Qué hice?
 
+Agregué controles para cambiar los colores de las visuales en tiempo real usando Open Stage Control.
+
+Ahora puedo cambiar el color de cada instrumento (bombo, piano, synth, etc.) individualmente mientras la música está sonando.
+
+#### Decisión: ¿Qué controlar?
+
+Decidí controlar **los colores de cada instrumento por separado**.
+
+**¿Por qué? Porque así puedo:**
+- Darle un color diferente a cada instrumento
+- Cambiar el mood de la pieza sin tocar el código
+- Experimentar con diferentes paletas de colores en vivo
+
+#### Cómo lo hice
+
+##### 1. Cambié las variables de color
+
+En lugar de tener colores fijos, creé variables que puedo cambiar:
+
+```javascript
+// Antes: colores fijos
+'piano': [100, 150, 255]
+
+// Después: variables que puedo controlar
+let pianoRed = 100;
+let pianoGreen = 150;
+let pianoBlue = 255;
+```
+
+Hice esto para cada instrumento: piano, bombo, synth, clap, etc.
+
+##### 2. Agregué un segundo WebSocket
+
+Mi código ahora tiene dos conexiones:
+- **Puerto 8081**: Recibe el audio de Strudel
+- **Puerto 8083**: Recibe los controles de Open Stage Control
+
+```javascript
+// Para el audio (Strudel)
+const socket = new WebSocket('ws://localhost:8081');
+
+// Para los controles (Open Stage Control)
+const socketControl = new WebSocket('ws://localhost:8083');
+```
+
+##### 3. Programé cómo recibir los cambios de color
+
+Cuando muevo un control en Open Stage Control, el código actualiza las variables:
+
+```javascript
+socketControl.onmessage = (event) => {
+  const data = JSON.parse(event.data);
+
+  // Si cambian el color del piano
+  if (data.address == "/rgb_1") {
+    pianoRed   = Number(data.args[0]);
+    pianoGreen = Number(data.args[1]);
+    pianoBlue  = Number(data.args[2]);
+  }
+  
+  // Y así para cada instrumento...
+}
+```
+
+##### 4. Hice un control especial para el bombo
+
+Para el bombo usé un **XY pad** en lugar de 3 sliders:
+- Mover a la izquierda/derecha = cambia el color (rojo→verde→azul)
+- Mover arriba/abajo = cambia el brillo (oscuro→brillante)
+
+Para esto necesité convertir de HSB a RGB con una función.
+
+#### Controles que creé en Open Stage Control
+
+1. **Control RGB para Sawtooth** - 3 colores (rojo, verde, azul)
+2. **Control RGB para Square** - 3 colores
+3. **Control RGB para Piano** - 3 colores
+4. **XY Pad para Bombo** - mueves en 2 dimensiones
+5. **Controles RGB para SD, Rim, CP, HH** - 3 colores cada uno
+
+Cada control envía a una dirección diferente:
+- Piano: `/rgb_1`
+- Bombo: `/xy_1`
+- Sawtooth: `/sawtooth_rgb`
+- etc.
+
+#### Lo que aprendí
+
+- Cómo usar dos WebSockets al mismo tiempo
+- Cómo funciona la conversión entre RGB y HSB
+- Que el XY pad es más fácil de usar que 3 sliders separados
+- Que puedo cambiar completamente el ambiente visual sin tocar el código
+
+#### Conclusión
+
+Ahora tengo control total sobre los colores de mi pieza. Puedo cambiar el mood visual en tiempo real mientras la música suena.
+
+El sistema funciona bien y es fácil de usar durante una presentación.
 
 ## Bitácora de reflexión
 
@@ -167,4 +266,5 @@ oscServer.on('message', (msg) => {
 <img width="836" height="441" alt="Captura de pantalla 2026-02-26 a la(s) 8 37 50 p m" src="https://github.com/user-attachments/assets/573a3321-253e-4487-9de8-e45e58ae05b1" />
 
 El sistema ahora tiene dos flujos: uno para los eventos de audio y otro para los parámetros de control. Strudel envía el audio a través de bridge.js, mientras que Open Stage Control envía los parámetros a bridgeUI.js. Ambos llegan al navegador por diferentes puertos, lo que permite controlar el sonido en tiempo real de forma organizada y modular.
+
 
