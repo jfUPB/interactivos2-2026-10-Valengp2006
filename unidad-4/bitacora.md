@@ -85,6 +85,38 @@ Escribir URLs largas en dispositivos móviles es propenso a errores y consume ti
 
 ## Bitácora de aplicación 
 
-
+Enlace a la bitácora con todos los cambios implementados: [Bitácora](https://github.com/Valengp2006/sistema-audiovisual-interactivo.git)
 
 ## Bitácora de reflexión
+
+### Diagrama actualizado:
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    STRUDEL (Audio)                          │
+│                  http://localhost:4321                      │
+└────────────────────────┬────────────────────────────────────┘
+                         │ WebSocket :8080
+                         ↓
+┌─────────────────────────────────────────────────────────────┐
+│              Bridge Strudel (oscBridge/bridge.js)           │
+│                      Puertos 8080 → 8081                    │
+└────────────────────────┬────────────────────────────────────┘
+                         │ WebSocket :8081
+                         ↓
+                    ┌─────────┐
+                    │VISUALES │ ← WebSocket :8083 ← bridgeUI.js
+                    │ p5.js   │                         ↑
+                    └─────────┘                         │
+                                                        │
+                         ┌──────────────────────────────┤
+                         │                              │
+                  OSC :9000                      WebSocket :8083
+                         │                              │
+              ┌──────────┴──────────┐           ┌──────┴───────┐
+              │ Open Stage Control  │           │   Público    │
+              │  (Performer - Tú)   │           │  (Celulares) │
+              └─────────────────────┘           └──────────────┘
+```
+### Enlace al repositorio:
+
+[sistema-audiovisual-interactivo](https://github.com/Valengp2006/sistema-audiovisual-interactivo.git)
