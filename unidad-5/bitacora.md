@@ -14,14 +14,16 @@
 - **Diagrama:**
 <img width="689" height="337" alt="Captura de pantalla 2026-03-17 a la(s) 9 06 27 a m" src="https://github.com/user-attachments/assets/eb3e4f8e-4cc1-48e6-97dd-4743b89c4f30" />
 
-[Interestellar](https://www.youtube.com/watch?v=UDVtMYqUAyw)
-[Space](https://www.youtube.com/watch?v=ztVV54sPOns)
-[Sound space Strudel](https://www.youtube.com/watch?v=dyIkHQbxJFc)
-
 ### Actividad 02
 
 - **Referentes encontrados y por qué son relevantes para la obra.**
+  - [Interestellar](https://www.youtube.com/watch?v=UDVtMYqUAyw): 
+  - [Space](https://www.youtube.com/watch?v=ztVV54sPOns)
+  - [Sound space Strudel](https://www.youtube.com/watch?v=dyIkHQbxJFc)
+  - Visuales:
+    <img width="1280" height="555" alt="Captura de pantalla 2026-03-17 a la(s) 9 11 55 a m" src="https://github.com/user-attachments/assets/44eeec71-1f14-4867-8d00-54610ec5f4cd" />
 - **Técnicas de audio generativo que se planea usar y por qué se ajustan al concepto.**
+
 
 ## Bitácora de aplicación 
 
