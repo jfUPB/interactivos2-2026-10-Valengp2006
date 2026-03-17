@@ -12,7 +12,7 @@
 - **¿Qué rol tendrá el público? (observador, participante activo, co-creador, etc.):**
   El público tendrá un rol principalmente de observador, aunque se está considerando la posibilidad de incluir interacción mediante sus propios dispositivos.
 - **Diagrama:**
-<img width="689" height="337" alt="Captura de pantalla 2026-03-17 a la(s) 9 06 27 a m" src="https://github.com/user-attachments/assets/eb3e4f8e-4cc1-48e6-97dd-4743b89c4f30" />
+  <img width="689" height="337" alt="Captura de pantalla 2026-03-17 a la(s) 9 06 27 a m" src="https://github.com/user-attachments/assets/eb3e4f8e-4cc1-48e6-97dd-4743b89c4f30" />
 
 ### Actividad 02
 
