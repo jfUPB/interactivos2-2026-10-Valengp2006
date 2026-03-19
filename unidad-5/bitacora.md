@@ -345,7 +345,287 @@ $: s("piano")
 //  ~9:30       Silencia eco, luego piano. Deja morir el reverb.
 // ============================================================
 ```
+**Código strudel versión 2:**
+```js
+// ============================================================
+//  C O S M O S  —  partitura Strudel  v3
+//  Cambios respecto a v2:
+//  · Crossfades entre todas las transiciones (sin cortes)
+//  · Percusión metálica reemplazada por pulsar grave
+//  · Estructura: un solo $ con stack + arrange
+//  · Ejecutar con play global — corre solo ~9 min
+// ============================================================
+//
+//  Tabla de ciclos (cpm base = 28):
+//  Fase 1   : 20 ciclos  (~2:45)
+//  T1       :  4 ciclos  (~35s)   crossfade incluido
+//  Fase 2   : 15 ciclos  (~2:00)
+//  T2       :  4 ciclos  (~35s)   crossfade incluido
+//  Fase 3   : 12 ciclos  (~1:40)
+//  T3       :  6 ciclos  (~50s)   fade out gradual
+//  Fase 1'  :  8 ciclos  (~1:05)
+//  TOTAL    : 69 ciclos  (~9:30)
+// ============================================================
 
+$: stack(
+
+  // ── PIANO ──────────────────────────────────────────────
+  arrange(
+    // F1: disperso, mucho silencio
+    [20, s("piano").n("<[0 ~ ~ 4] [~ 7 ~ ~] [11 ~ 4 ~] [~ ~ 0 ~]>")
+         .scale("C:lydian").octave(4)
+         .adsr("0.01 2.0 0.3 3.0").gain(0.55)
+         .room(2.5).roomsize(10).cutoff(1800)
+         .pan(sine.range(-0.3, 0.3).slow(8))],
+
+    // T1: mismo piano, fade suave hacia F2
+    [2,  s("piano").n("<[0 ~ ~ 4] [~ 7 ~ ~] [11 ~ 4 ~] [~ ~ 0 ~]>")
+         .scale("C:lydian").octave(4)
+         .adsr("0.01 2.0 0.3 3.0").gain(0.55)
+         .room(2.5).roomsize(10).cutoff(1800)],
+    [2,  s("piano").n("<[0 2 4 ~] [7 ~ 4 2] [0 4 7 11] [~ 2 ~ 0]>")
+         .scale("C:lydian").octave(4)
+         .adsr("0.01 1.5 0.4 2.5")
+         .gain(sine.range(0.55, 0.6).slow(2))
+         .room(2.5).roomsize(10).cutoff(1600)],
+
+    // F2: denso, cutoff animado
+    [15, s("piano").n("<[0 2 4 ~] [7 ~ 4 2] [0 4 7 11] [~ 2 ~ 0]>")
+         .scale("C:lydian").octave(4)
+         .adsr("0.01 1.2 0.4 2.0").gain(0.6).density(1.4)
+         .room(2).roomsize(9)
+         .cutoff(sine.range(600, 2200).slow(6))
+         .pan(sine.range(-0.4, 0.4).slow(5))],
+
+    // T2: crossfade hacia F3 — sube octava gradualmente
+    [2,  s("piano").n("<[0 2 4 ~] [7 ~ 4 2] [0 4 7 11] [~ 2 ~ 0]>")
+         .scale("C:lydian").octave(4)
+         .gain(sine.range(0.6, 0.3).slow(2))
+         .room(2).roomsize(9).cutoff(1800)],
+    [2,  s("piano").n("<[0 2 4 7] [2 4 7 11] [4 7 11 14] [7 11 14 16]>")
+         .scale("C:lydian").octave(5)
+         .gain(sine.range(0.3, 0.7).slow(2)).density(1.5)
+         .room(2).roomsize(9).cutoff(2000)],
+
+    // F3: clímax — octava alta, máxima densidad
+    [12, s("piano").n("<[0 2 4 7] [2 4 7 11] [4 7 11 14] [7 11 14 16]>")
+         .scale("C:lydian").octave(5)
+         .adsr("0.01 0.8 0.5 1.5").gain(0.7).density(2)
+         .room(1.8).roomsize(8)
+         .cutoff(sine.range(1000, 4000).fast(0.8))
+         .pan(sine.range(-0.6, 0.6).slow(3))],
+
+    // T3: fade out hacia F1'
+    [3,  s("piano").n("<[0 2 4 7] [2 4 7 11]>")
+         .scale("C:lydian").octave(5)
+         .gain(sine.range(0.7, 0.4).slow(3))
+         .room(2).roomsize(9).cutoff(2000)],
+    [3,  s("piano").n("<[0 ~ ~ 4] [~ 7 ~ ~] [11 ~ 4 ~] [~ ~ 0 ~]>")
+         .scale("C:lydian").octave(4)
+         .gain(sine.range(0.4, 0.38).slow(3))
+         .room(2.5).roomsize(10).cutoff(1300)],
+
+    // F1': igual que F1 pero más tenue y oscuro
+    [8,  s("piano").n("<[0 ~ ~ 4] [~ 7 ~ ~] [11 ~ 4 ~] [~ ~ 0 ~]>")
+         .scale("C:lydian").octave(4)
+         .adsr("0.01 2.0 0.3 3.0")
+         .gain(sine.range(0.38, 0.0).slow(8))
+         .room(2.5).roomsize(10).cutoff(1100)
+         .pan(sine.range(-0.3, 0.3).slow(8))]
+  ),
+
+
+  // ── ECO DE PIANO ───────────────────────────────────────
+  arrange(
+    // F1: eco lejano
+    [20, s("piano").n("<[0 ~ ~ 4] [~ 7 ~ ~] [11 ~ 4 ~] [~ ~ 0 ~]>")
+         .scale("C:lydian").octave(5)
+         .adsr("0.01 1.5 0.1 4.0").gain(0.08).late(0.35)
+         .room(3).roomsize(10).cutoff(900).pan(0.6)],
+
+    // T1 + F2: eco se apaga
+    [4,  s("piano").n("<[0 ~ ~ 4] [~ 7 ~ ~]>")
+         .scale("C:lydian").octave(5)
+         .gain(sine.range(0.08, 0.0).slow(4)).late(0.35)
+         .room(3).roomsize(10).cutoff(800)],
+
+    // F2, T2, F3, T3: silencio
+    [33, s("piano").n("0").gain(0)],
+
+    // F1': eco reaparece, más suave que al inicio
+    [8,  s("piano").n("<[0 ~ ~ 4] [~ 7 ~ ~] [11 ~ 4 ~] [~ ~ 0 ~]>")
+         .scale("C:lydian").octave(5)
+         .adsr("0.01 1.5 0.1 5.0")
+         .gain(sine.range(0.04, 0.0).slow(8)).late(0.4)
+         .room(3).roomsize(10).cutoff(700).pan(-0.5)]
+  ),
+
+
+  // ── CUERDAS ────────────────────────────────────────────
+  arrange(
+    // F1: silencio
+    [20, s("strings").note("c3").gain(0)],
+
+    // T1: entran como niebla — attack 3s hace que sean invisibles al principio
+    [4,  s("strings").note("<c3 g3>/4")
+         .adsr("3.0 0 1 5.0")
+         .gain(sine.range(0.0, 0.2).slow(4))
+         .cutoff(sine.range(200, 600).slow(12))
+         .room(3).roomsize(10).pan(0.4)],
+
+    // F2: más activas
+    [15, s("strings").note("<c3 e3 g3 b3>/2")
+         .adsr("1.5 0 1 3.0").gain(0.3)
+         .cutoff(sine.range(400, 1200).slow(7))
+         .room(2.5).roomsize(9).pan(-0.4)],
+
+    // T2: crecen hacia F3
+    [4,  s("strings").note("<c3 e3 g3 b3>/2")
+         .adsr("1.5 0 1 3.0")
+         .gain(sine.range(0.3, 0.42).slow(4))
+         .cutoff(sine.range(600, 2000).slow(5))
+         .room(2.5).roomsize(9)],
+
+    // F3: máxima presencia
+    [12, s("strings").note("<c3 e3 g3 b3 d4>/2")
+         .adsr("1.5 0 1 3.0").gain(0.42)
+         .cutoff(sine.range(800, 3000).slow(4))
+         .room(2.5).roomsize(9)],
+
+    // T3: fade out gradual
+    [6,  s("strings").note("<c3 e3 g3>/2")
+         .gain(sine.range(0.42, 0.0).slow(6))
+         .room(3).roomsize(10)],
+
+    // F1': silencio
+    [8,  s("strings").note("c3").gain(0)]
+  ),
+
+
+  // ── BAJO ───────────────────────────────────────────────
+  arrange(
+    // F1: silencio
+    [20, s("sine").note("c1").gain(0)],
+
+    // T1: aparece suave
+    [4,  s("sine").note("<c1 ~ c1 ~>/2")
+         .adsr("0.05 0.8 0 0.5")
+         .gain(sine.range(0.0, 0.28).slow(4))
+         .room(1.5).lpf(180)],
+
+    // F2: estable
+    [15, s("sine").note("<c1 ~ c1 ~>/2")
+         .adsr("0.05 0.8 0 0.5").gain(0.3)
+         .room(1.5).lpf(180)],
+
+    // T2: crece
+    [4,  s("sine").note("<c1 ~ c1 ~>/2")
+         .adsr("0.05 0.8 0 0.5")
+         .gain(sine.range(0.3, 0.45).slow(4))
+         .room(1.5).lpf(200)],
+
+    // F3: más denso
+    [12, s("sine").note("<c1 c1 g0 c1>/1")
+         .adsr("0.02 0.6 0 0.4").gain(0.45)
+         .room(1.5).lpf(200)],
+
+    // T3: fade out
+    [6,  s("sine").note("<c1 ~ c1 ~>/2")
+         .gain(sine.range(0.45, 0.0).slow(6))
+         .room(1.5).lpf(180)],
+
+    // F1': silencio
+    [8,  s("sine").note("c1").gain(0)]
+  ),
+
+
+  // ── ÓRGANO ─────────────────────────────────────────────
+  arrange(
+    // F1 + T1 + F2: silencio
+    [39, s("organ").note("c2").gain(0)],
+
+    // T2: entra como ola — attack 4s, completamente invisible al principio
+    [4,  s("organ").note("<c2 g2>/8")
+         .adsr("4.0 0 1 6.0")
+         .gain(sine.range(0.0, 0.35).slow(4))
+         .cutoff(sine.range(300, 1000).slow(8))
+         .room(3).roomsize(10)],
+
+    // F3: plena presencia
+    [12, s("organ").note("<c2 g2>/8")
+         .adsr("4.0 0 1 6.0")
+         .gain(sine.range(0.25, 0.5).slow(16))
+         .cutoff(sine.range(300, 1000).slow(8))
+         .room(3).roomsize(10)],
+
+    // T3: fade muy lento — el release de 6s hace que la cola
+    //     se escuche incluso después de que el gain llegue a 0
+    [6,  s("organ").note("<c2 g2>/8")
+         .adsr("4.0 0 1 6.0")
+         .gain(sine.range(0.4, 0.0).slow(6))
+         .room(3).roomsize(10)],
+
+    // F1': silencio (pero la cola del órgano sigue resonando)
+    [8,  s("organ").note("c2").gain(0)]
+  ),
+
+
+  // ── PULSAR  (reemplaza percusión metálica) ─────────────
+  // Inspirado en CP 1919 — el primer púlsar descubierto.
+  // Graves lentos con decay largo, como una estrella que respira.
+  arrange(
+    // F1 + T1 + F2: silencio
+    [39, s("bd").n("0").gain(0)],
+
+    // T2: aparece suave, casi imperceptible
+    [4,  s("bd").n("<0 ~ ~ ~ ~ ~ ~ ~>")
+         .adsr("0.001 3.5 0 2.0")
+         .gain(sine.range(0.0, 0.18).slow(4))
+         .room(3).roomsize(10).lpf(100)],
+
+    // F3: pulsar pleno — lento, profundo, inexorable
+    [12, s("bd").n("<0 ~ ~ ~ ~ ~ ~ ~>")
+         .adsr("0.001 3.5 0 2.0").gain(0.22)
+         .room(3).roomsize(10).lpf(120)
+         .pan(sine.range(-0.25, 0.25).slow(13))],
+
+    // T3: se aleja lentamente
+    [6,  s("bd").n("<0 ~ ~ ~ ~ ~ ~ ~>")
+         .adsr("0.001 3.5 0 2.0")
+         .gain(sine.range(0.22, 0.0).slow(6))
+         .room(3).roomsize(10).lpf(100)],
+
+    // F1': silencio
+    [8,  s("bd").n("0").gain(0)]
+  ),
+
+
+  // ── SHIMMER (brillo en alturas, solo F3) ───────────────
+  arrange(
+    // F1 + T1 + F2 + T2: silencio
+    [43, s("sine").note("e5").gain(0)],
+
+    // F3: brillo pulsante en las alturas
+    [12, s("sine").note("<e5 b5 g5 d6>/2")
+         .adsr("2.0 0 1 4.0")
+         .gain(sine.range(0.05, 0.2).slow(5))
+         .room(3).roomsize(10).lpf(3000)
+         .pan(sine.range(-0.8, 0.8).slow(7))],
+
+    // T3 + F1': fade y silencio
+    [6,  s("sine").note("<e5 b5>/2")
+         .gain(sine.range(0.15, 0.0).slow(6))
+         .room(3).roomsize(10).lpf(3000)],
+
+    [8,  s("sine").note("e5").gain(0)]
+  )
+
+).cpm(28)
+// ============================================================
+//  FIN  —  ~9 min 30 s
+//  Presiona play una vez y deja correr.
+// ============================================================
+```
 - **Proceso de creación del audio generativo.**
 - **Decisiones técnicas y estéticas que se tomaron y por qué.**
 - **Código completo de la pieza de audio.**
