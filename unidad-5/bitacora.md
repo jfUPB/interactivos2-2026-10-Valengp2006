@@ -626,6 +626,286 @@ $: stack(
 //  Presiona play una vez y deja correr.
 // ============================================================
 ```
+**Verisón 3 código strudel:**
+```js
+// ============================================================
+//  C O S M O S  —  partitura Strudel  v4
+//  Cambios respecto a v3:
+//  · Clicks eliminados — crossfades con .gain().fadein/fadeout
+//    reemplazados por .legato() y ataques más suaves
+//  · Bajo y pulsar fijados al centro (sin pan)
+//  · Ataque del pulsar subido de 0.001 a 0.08 para evitar pop
+// ============================================================
+//
+//  Ciclos totales: 69  (~9 min 30 s a 28 cpm)
+//  Ejecutar: botón play global, una sola vez.
+// ============================================================
+
+$: stack(
+
+  // ── PIANO ──────────────────────────────────────────────
+  arrange(
+    // F1
+    [20, s("piano").n("<[0 ~ ~ 4] [~ 7 ~ ~] [11 ~ 4 ~] [~ ~ 0 ~]>")
+         .scale("C:lydian").octave(4)
+         .adsr("0.01 2.0 0.3 3.0").gain(0.55)
+         .room(2.5).roomsize(10).cutoff(1800)
+         .pan(sine.range(-0.3, 0.3).slow(8))],
+
+    // T1a: mismo patrón F1, gain estable — sin sine.range para evitar clicks
+    [2,  s("piano").n("<[0 ~ ~ 4] [~ 7 ~ ~] [11 ~ 4 ~] [~ ~ 0 ~]>")
+         .scale("C:lydian").octave(4)
+         .adsr("0.01 2.0 0.3 3.0").gain(0.55)
+         .room(2.5).roomsize(10).cutoff(1800)],
+
+    // T1b: patrón F2 entra suave con gain bajo, sube en F2
+    [2,  s("piano").n("<[0 2 4 ~] [7 ~ 4 2] [0 4 7 11] [~ 2 ~ 0]>")
+         .scale("C:lydian").octave(4)
+         .adsr("0.01 1.8 0.4 2.5").gain(0.3)
+         .room(2.2).roomsize(10).cutoff(1500)],
+
+    // F2
+    [15, s("piano").n("<[0 2 4 ~] [7 ~ 4 2] [0 4 7 11] [~ 2 ~ 0]>")
+         .scale("C:lydian").octave(4)
+         .adsr("0.01 1.2 0.4 2.0").gain(0.6).density(1.4)
+         .room(2).roomsize(9)
+         .cutoff(sine.range(600, 2200).slow(6))
+         .pan(sine.range(-0.4, 0.4).slow(5))],
+
+    // T2a: F2 baja gain
+    [2,  s("piano").n("<[0 2 4 ~] [7 ~ 4 2] [0 4 7 11] [~ 2 ~ 0]>")
+         .scale("C:lydian").octave(4)
+         .adsr("0.01 1.5 0.4 2.5").gain(0.35)
+         .room(2.2).roomsize(9).cutoff(1800)],
+
+    // T2b: F3 entra en octava 5 con gain bajo
+    [2,  s("piano").n("<[0 2 4 7] [2 4 7 11] [4 7 11 14] [7 11 14 16]>")
+         .scale("C:lydian").octave(5)
+         .adsr("0.01 1.2 0.5 2.0").gain(0.35).density(1.5)
+         .room(2).roomsize(9).cutoff(2000)],
+
+    // F3
+    [12, s("piano").n("<[0 2 4 7] [2 4 7 11] [4 7 11 14] [7 11 14 16]>")
+         .scale("C:lydian").octave(5)
+         .adsr("0.01 0.8 0.5 1.5").gain(0.7).density(2)
+         .room(1.8).roomsize(8)
+         .cutoff(sine.range(1000, 4000).fast(0.8))
+         .pan(sine.range(-0.6, 0.6).slow(3))],
+
+    // T3a: baja octava gradualmente
+    [3,  s("piano").n("<[0 2 4 7] [2 4 7 11]>")
+         .scale("C:lydian").octave(5)
+         .adsr("0.01 1.5 0.4 2.5").gain(0.45)
+         .room(2.2).roomsize(9).cutoff(2000)],
+
+    // T3b: vuelve a patrón F1 en octava 4
+    [3,  s("piano").n("<[0 ~ ~ 4] [~ 7 ~ ~] [11 ~ 4 ~] [~ ~ 0 ~]>")
+         .scale("C:lydian").octave(4)
+         .adsr("0.01 2.0 0.3 3.0").gain(0.4)
+         .room(2.5).roomsize(10).cutoff(1300)],
+
+    // F1': igual a F1 pero más oscuro, gain baja progresivamente
+    [8,  s("piano").n("<[0 ~ ~ 4] [~ 7 ~ ~] [11 ~ 4 ~] [~ ~ 0 ~]>")
+         .scale("C:lydian").octave(4)
+         .adsr("0.01 2.5 0.2 4.0").gain(0.32)
+         .room(2.5).roomsize(10).cutoff(1000)
+         .pan(sine.range(-0.2, 0.2).slow(10))]
+  ),
+
+
+  // ── ECO DE PIANO ───────────────────────────────────────
+  arrange(
+    // F1
+    [20, s("piano").n("<[0 ~ ~ 4] [~ 7 ~ ~] [11 ~ 4 ~] [~ ~ 0 ~]>")
+         .scale("C:lydian").octave(5)
+         .adsr("0.01 1.5 0.1 4.0").gain(0.08).late(0.35)
+         .room(3).roomsize(10).cutoff(900).pan(0.6)],
+
+    // T1: eco se desvanece — gain fijo bajo, no sine.range
+    [4,  s("piano").n("<[0 ~ ~ 4] [~ 7 ~ ~]>")
+         .scale("C:lydian").octave(5)
+         .adsr("0.01 1.5 0.1 4.0").gain(0.03).late(0.35)
+         .room(3).roomsize(10).cutoff(800)],
+
+    // F2 + T2 + F3 + T3: silencio
+    [33, s("piano").n("0").gain(0)],
+
+    // F1': eco reaparece muy suave
+    [8,  s("piano").n("<[0 ~ ~ 4] [~ 7 ~ ~] [11 ~ 4 ~] [~ ~ 0 ~]>")
+         .scale("C:lydian").octave(5)
+         .adsr("0.01 2.0 0.1 5.0").gain(0.04).late(0.4)
+         .room(3).roomsize(10).cutoff(700).pan(-0.4)]
+  ),
+
+
+  // ── CUERDAS ────────────────────────────────────────────
+  arrange(
+    // F1: silencio
+    [20, s("strings").note("c3").gain(0)],
+
+    // T1: entran con attack 3s — el gain bajo hace que sean casi inaudibles
+    //     al principio, sin necesidad de sine.range
+    [4,  s("strings").note("<c3 g3>/4")
+         .adsr("3.0 0 1 5.0").gain(0.15)
+         .cutoff(sine.range(200, 600).slow(12))
+         .room(3).roomsize(10).pan(0.35)],
+
+    // F2: gain sube al valor pleno
+    [15, s("strings").note("<c3 e3 g3 b3>/2")
+         .adsr("1.5 0 1 3.0").gain(0.3)
+         .cutoff(sine.range(400, 1200).slow(7))
+         .room(2.5).roomsize(9).pan(-0.35)],
+
+    // T2: gain sube un poco más
+    [4,  s("strings").note("<c3 e3 g3 b3>/2")
+         .adsr("1.5 0 1 3.0").gain(0.38)
+         .cutoff(sine.range(600, 2000).slow(5))
+         .room(2.5).roomsize(9)],
+
+    // F3
+    [12, s("strings").note("<c3 e3 g3 b3 d4>/2")
+         .adsr("1.5 0 1 3.0").gain(0.42)
+         .cutoff(sine.range(800, 3000).slow(4))
+         .room(2.5).roomsize(9)],
+
+    // T3a: reducen notas y gain
+    [3,  s("strings").note("<c3 e3 g3>/2")
+         .adsr("2.0 0 1 4.0").gain(0.25)
+         .room(3).roomsize(10)],
+
+    // T3b: dos notas, casi desaparecen
+    [3,  s("strings").note("<c3 g3>/4")
+         .adsr("3.0 0 1 5.0").gain(0.1)
+         .room(3).roomsize(10)],
+
+    // F1': silencio
+    [8,  s("strings").note("c3").gain(0)]
+  ),
+
+
+  // ── BAJO — SIEMPRE EN EL CENTRO ────────────────────────
+  arrange(
+    // F1: silencio
+    [20, s("sine").note("c1").gain(0)],
+
+    // T1: aparece suave, gain fijo bajo
+    [4,  s("sine").note("<c1 ~ c1 ~>/2")
+         .adsr("0.05 0.8 0 0.5").gain(0.18)
+         .room(1.5).lpf(180)],
+
+    // F2: sube a gain pleno
+    [15, s("sine").note("<c1 ~ c1 ~>/2")
+         .adsr("0.05 0.8 0 0.5").gain(0.3)
+         .room(1.5).lpf(180)],
+
+    // T2: sube un poco
+    [4,  s("sine").note("<c1 ~ c1 ~>/2")
+         .adsr("0.05 0.8 0 0.5").gain(0.38)
+         .room(1.5).lpf(200)],
+
+    // F3: más denso
+    [12, s("sine").note("<c1 c1 g0 c1>/1")
+         .adsr("0.05 0.6 0 0.5").gain(0.45)
+         .room(1.5).lpf(200)],
+
+    // T3: baja en dos pasos
+    [3,  s("sine").note("<c1 ~ c1 ~>/2")
+         .adsr("0.05 0.8 0 0.5").gain(0.25)
+         .room(1.5).lpf(180)],
+    [3,  s("sine").note("<c1 ~ ~ ~>/2")
+         .adsr("0.05 1.0 0 0.8").gain(0.12)
+         .room(2).lpf(160)],
+
+    // F1': silencio
+    [8,  s("sine").note("c1").gain(0)]
+  ),
+
+
+  // ── ÓRGANO ─────────────────────────────────────────────
+  arrange(
+    // F1 + T1 + F2: silencio
+    [39, s("organ").note("c2").gain(0)],
+
+    // T2: entra con attack 4s — el gain bajo hace el trabajo
+    //     sin necesidad de sine.range en el gain
+    [4,  s("organ").note("<c2 g2>/8")
+         .adsr("4.0 0 1 6.0").gain(0.2)
+         .cutoff(sine.range(300, 1000).slow(8))
+         .room(3).roomsize(10)],
+
+    // F3: sube a gain pleno
+    [12, s("organ").note("<c2 g2>/8")
+         .adsr("4.0 0 1 6.0").gain(0.42)
+         .cutoff(sine.range(300, 1000).slow(8))
+         .room(3).roomsize(10)],
+
+    // T3: baja gain en dos pasos
+    [3,  s("organ").note("<c2 g2>/8")
+         .adsr("4.0 0 1 6.0").gain(0.22)
+         .room(3).roomsize(10)],
+    [3,  s("organ").note("c2")
+         .adsr("4.0 0 1 6.0").gain(0.08)
+         .room(3).roomsize(10)],
+
+    // F1': silencio (la cola de release suena igual)
+    [8,  s("organ").note("c2").gain(0)]
+  ),
+
+
+  // ── PULSAR — CENTRO, SIN PANEO ─────────────────────────
+  // Ataque subido a 0.08 para eliminar el pop de 0.001
+  arrange(
+    // F1 + T1 + F2: silencio
+    [39, s("bd").n("0").gain(0)],
+
+    // T2: aparece muy suave, sin paneo
+    [4,  s("bd").n("<0 ~ ~ ~ ~ ~ ~ ~>")
+         .adsr("0.08 3.5 0 2.0").gain(0.14)
+         .room(3).roomsize(10).lpf(100)],
+
+    // F3: pleno — lento, profundo, sin paneo
+    [12, s("bd").n("<0 ~ ~ ~ ~ ~ ~ ~>")
+         .adsr("0.08 3.5 0 2.0").gain(0.22)
+         .room(3).roomsize(10).lpf(120)],
+
+    // T3: baja en dos pasos
+    [3,  s("bd").n("<0 ~ ~ ~ ~ ~ ~ ~>")
+         .adsr("0.08 3.5 0 2.0").gain(0.12)
+         .room(3).roomsize(10).lpf(110)],
+    [3,  s("bd").n("<0 ~ ~ ~ ~ ~ ~ ~>")
+         .adsr("0.08 3.5 0 2.0").gain(0.05)
+         .room(3).roomsize(10).lpf(100)],
+
+    // F1': silencio
+    [8,  s("bd").n("0").gain(0)]
+  ),
+
+
+  // ── SHIMMER ────────────────────────────────────────────
+  arrange(
+    // F1 + T1 + F2 + T2: silencio
+    [43, s("sine").note("e5").gain(0)],
+
+    // F3: gain fijo bajo — el adsr con attack 2s hace la entrada suave
+    [12, s("sine").note("<e5 b5 g5 d6>/2")
+         .adsr("2.0 0 1 4.0").gain(0.15)
+         .room(3).roomsize(10).lpf(3000)
+         .pan(sine.range(-0.7, 0.7).slow(7))],
+
+    // T3: baja gain
+    [4,  s("sine").note("<e5 b5>/2")
+         .adsr("2.0 0 1 4.0").gain(0.06)
+         .room(3).roomsize(10).lpf(3000)],
+
+    // F1': silencio
+    [10, s("sine").note("e5").gain(0)]
+  )
+
+).cpm(28)
+// ============================================================
+//  FIN  —  ~9 min 30 s
+// ============================================================
+```
 - **Proceso de creación del audio generativo.**
 - **Decisiones técnicas y estéticas que se tomaron y por qué.**
 - **Código completo de la pieza de audio.**
