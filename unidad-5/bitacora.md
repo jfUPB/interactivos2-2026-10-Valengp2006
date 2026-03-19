@@ -53,6 +53,299 @@ Esta estructura guía tanto el desarrollo compositivo como la relación entre so
 
 ### Actividad 03
 
+**Versión 1 audio:**
+
+```js
+// ============================================================
+//  C O S M O S  —  partitura Strudel
+//  Estructura: Fase 1 → T1 → Fase 2 → T2 → Fase 3 → T3 → Fase 1'
+//  Duración total aprox: 9–10 minutos
+//  Escala base: C lydian (el cuarto grado elevado medio tono
+//               da sensación de vastedad, nunca resuelve)
+// ============================================================
+//
+//  CÓMO USAR ESTE ARCHIVO
+//  ─────────────────────
+//  1. Pega TODO el archivo en Strudel al inicio.
+//  2. Solo ejecuta los bloques de la fase activa
+//     (Ctrl+Enter en cada bloque que quieras activar).
+//  3. Para silenciar un bloque: Ctrl+. con el cursor en ese bloque.
+//  4. Sigue la guía de ACCIONES en cada sección.
+//  5. Los tiempos son orientativos — confía en tu oído.
+//
+// ============================================================
+
+
+
+
+// ============================================================
+//  FASE 1  —  "El vacío respira"
+//  Duración: ~2 min 45 s  (20 ciclos a 28 cpm)
+//  Sensación: inmensidad, silencio habitado, expectativa
+//
+//  ACCIÓN: Ejecuta estos 2 bloques al comenzar.
+//          Deja correr ~20 ciclos antes de pasar a T1.
+//          Observa al público — si están muy quietos y
+//          absorbidos, espera unos ciclos más.
+// ============================================================
+
+setcpm(28)
+
+const motif = "<[0 ~ ~ 4] [~ 7 ~ ~] [11 ~ 4 ~] [~ ~ 0 ~]>"
+
+// Piano principal — notas dispersas, mucho silencio entre ellas
+$: s("piano")
+  .n(motif)
+  .scale("C:lydian")
+  .octave(4)
+  .adsr("0.01 2.0 0.3 3.0")
+  .gain(0.55)
+  .room(2.5).roomsize(10)
+  .cutoff(1800)
+  .pan(sine.range(-0.3, 0.3).slow(8))
+
+// Eco lejano — llega tarde, casi inaudible, como una memoria
+$: s("piano")
+  .n(motif)
+  .scale("C:lydian")
+  .octave(5)
+  .adsr("0.01 1.5 0.1 4.0")
+  .gain(0.08)
+  .late(0.35)
+  .room(3).roomsize(10)
+  .cutoff(900)
+  .pan(0.6)
+
+
+
+
+// ============================================================
+//  TRANSICIÓN 1  —  "Algo despierta"
+//  Duración: ~35 s
+//  Sensación: el espacio se llena sin que sepas cuándo empezó
+//
+//  ACCIÓN: Ejecuta los 2 bloques nuevos de abajo.
+//          NO apagues todavía el piano de Fase 1.
+//          Las cuerdas tardan 3 s en aparecer — son invisibles
+//          al principio. El bajo aparece suave por debajo.
+//          Espera ~4 ciclos. Cuando las cuerdas sean audibles,
+//          silencia el eco de piano (el segundo bloque de F1).
+// ============================================================
+
+// Cuerdas — entran como niebla, attack de 3 segundos
+$: note("<c3 g3>/4")
+  .s("strings")
+  .adsr("3.0 0 1 5.0")
+  .gain(0.2)
+  .cutoff(sine.range(200, 600).slow(12))
+  .room(3).roomsize(10)
+  .pan(0.4)
+
+// Bajo — primera respiración rítmica de la obra
+$: note("<c1 ~ c1 ~>/2")
+  .s("sine")
+  .adsr("0.05 0.8 0 0.5")
+  .gain(0.28)
+  .room(1.5)
+  .lpf(180)
+
+
+
+
+// ============================================================
+//  FASE 2  —  "La materia se organiza"
+//  Duración: ~2 min  (15 ciclos a 32 cpm)
+//  Sensación: pulso, gravedad, algo tomando forma
+//
+//  ACCIÓN: Cambia setcpm a 32 (ejecútalo solo).
+//          Ejecuta el nuevo piano denso.
+//          Silencia el piano original de Fase 1 cuando
+//          el nuevo piano ya esté sonando con fuerza.
+//          Las cuerdas y el bajo siguen corriendo.
+// ============================================================
+
+setcpm(32)
+
+// Piano más denso — el motif se llena, sube densidad
+$: s("piano")
+  .n("<[0 2 4 ~] [7 ~ 4 2] [0 4 7 11] [~ 2 ~ 0]>")
+  .scale("C:lydian")
+  .octave(4)
+  .adsr("0.01 1.2 0.4 2.0")
+  .gain(0.6)
+  .density(1.4)
+  .room(2).roomsize(9)
+  .cutoff(sine.range(600, 2200).slow(6))
+  .pan(sine.range(-0.4, 0.4).slow(5))
+
+// Cuerdas más activas — reemplaza las cuerdas de T1
+$: note("<c3 e3 g3 b3>/2")
+  .s("strings")
+  .adsr("1.5 0 1 3.0")
+  .gain(0.3)
+  .cutoff(sine.range(400, 1200).slow(7))
+  .room(2.5).roomsize(9)
+  .pan(-0.4)
+
+// Piano eco en octava alta — reaparece más brillante
+$: s("piano")
+  .n("<[0 2 4 ~] [7 ~ 4 2] [0 4 7 11] [~ 2 ~ 0]>")
+  .scale("C:lydian")
+  .octave(5)
+  .adsr("0.01 1.0 0.2 2.5")
+  .gain(0.12)
+  .late(0.28)
+  .room(2.5).roomsize(9)
+  .cutoff(1200)
+  .pan(-0.5)
+
+
+
+
+// ============================================================
+//  TRANSICIÓN 2  —  "La ignición comienza"
+//  Duración: ~30 s
+//  Sensación: el techo sube, algo irreversible ocurre
+//
+//  ACCIÓN: Ejecuta el órgano y la percusión.
+//          El órgano tiene attack de 4 s — tarda en aparecer.
+//          Cuando lo sientas presente, estás en Fase 3.
+//          No hace falta silenciar nada aún.
+// ============================================================
+
+// Órgano — la pared de sonido, entra como una ola lenta
+$: note("<c2 g2>/8")
+  .s("organ")
+  .adsr("4.0 0 1 6.0")
+  .gain(sine.range(0.15, 0.45).slow(16))
+  .cutoff(sine.range(300, 1000).slow(8))
+  .room(3).roomsize(10)
+
+// Percusión cósmica — metal resonante, no drum kit
+$: s("metal")
+  .n("<0 ~ 3 ~>")
+  .adsr("0.001 2.0 0 1.5")
+  .gain(0.18)
+  .room(3).roomsize(10)
+  .cutoff(sine.range(200, 700).slow(3))
+  .pan(rand.range(-0.7, 0.7))
+
+
+
+
+// ============================================================
+//  FASE 3  —  "Ignición"
+//  Duración: ~1 min 40 s  (clímax — no lo extiendas demasiado)
+//  Sensación: expansión total, todo presente, abrumador
+//
+//  ACCIÓN: Cambia setcpm a 38.
+//          Ejecuta el piano de clímax y el shimmer.
+//          Silencia el piano de Fase 2 cuando el nuevo esté activo.
+//          Aquí todos los bloques corren juntos:
+//          piano clímax + cuerdas F2 + bajo + órgano + percusión + shimmer.
+//          Deja correr ~10–12 ciclos. Siente el punto de saturación
+//          — ese es el momento de empezar T3.
+// ============================================================
+
+setcpm(38)
+
+// Piano clímax — sube una octava, más urgente
+$: s("piano")
+  .n("<[0 2 4 7] [2 4 7 11] [4 7 11 14] [7 11 14 16]>")
+  .scale("C:lydian")
+  .octave(5)
+  .adsr("0.01 0.8 0.5 1.5")
+  .gain(0.7)
+  .density(2)
+  .room(1.8).roomsize(8)
+  .cutoff(sine.range(1000, 4000).fast(0.8))
+  .pan(sine.range(-0.6, 0.6).slow(3))
+
+// Shimmer — brillo extremo en las alturas
+$: note("<e5 b5 g5 d6>/2")
+  .s("sine")
+  .adsr("2.0 0 1 4.0")
+  .gain(sine.range(0.06, 0.22).slow(5))
+  .room(3).roomsize(10)
+  .lpf(3000)
+  .pan(sine.range(-0.8, 0.8).slow(7))
+
+
+
+
+// ============================================================
+//  TRANSICIÓN 3  —  "El cosmos exhala"
+//  Duración: ~45 s – 1 min
+//  Sensación: la energía no colapsa — se disuelve hacia afuera
+//
+//  ACCIÓN: Silencia en este orden, con ~10 s entre cada uno:
+//          1. Percusión (metal)
+//          2. Piano clímax y shimmer
+//          3. Cuerdas (o baja su gain gradualmente)
+//          4. Órgano (tiene release de 6 s — su cola es parte del silencio)
+//          5. Bajo
+//          Queda solo el piano de Fase 1' corriendo.
+// ============================================================
+
+
+
+
+// ============================================================
+//  FASE 1'  —  "El vacío que recuerda"
+//  Duración: ~1 min – 1 min 30 s hasta silencio total
+//  Sensación: el mismo inicio, pero el público ya no es el mismo
+//
+//  ACCIÓN: Mientras silencias T3, ya ejecuta estos 2 bloques.
+//          Son casi idénticos a Fase 1, pero el gain es más bajo
+//          y el cutoff más oscuro — como un recuerdo del inicio.
+//          Deja correr 6–8 ciclos.
+//          Al final, silencia el eco primero, luego el piano.
+//          El reverb tiene release de 5 s — el último sonido
+//          tarda en desaparecer. Ese fade es el final de la obra.
+// ============================================================
+
+setcpm(28)
+
+// Piano — igual que Fase 1 pero más tenue, más oscuro
+$: s("piano")
+  .n(motif)
+  .scale("C:lydian")
+  .octave(4)
+  .adsr("0.01 2.0 0.3 3.0")
+  .gain(0.38)
+  .room(2.5).roomsize(10)
+  .cutoff(1100)
+  .pan(sine.range(-0.3, 0.3).slow(8))
+
+// Eco — más suave aún que al inicio, casi inaudible
+$: s("piano")
+  .n(motif)
+  .scale("C:lydian")
+  .octave(5)
+  .adsr("0.01 1.5 0.1 5.0")
+  .gain(0.04)
+  .late(0.4)
+  .room(3).roomsize(10)
+  .cutoff(700)
+  .pan(-0.5)
+
+
+// ============================================================
+//  FIN
+//  Duración total aproximada: 9 min 30 s
+//
+//  RESUMEN DE ACCIONES EN VIVO:
+//  0:00        Ejecuta Fase 1 (2 bloques)
+//  ~2:45       Ejecuta T1 (2 bloques nuevos)
+//  ~3:20       setcpm(32) + ejecuta Fase 2, silencia eco F1
+//  ~5:20       Ejecuta T2 (órgano + percusión)
+//  ~5:50       setcpm(38) + ejecuta Fase 3, silencia piano F2
+//  ~7:30       Inicia T3: silencia bloques en orden (ver arriba)
+//  ~8:15       Ejecuta Fase 1' (2 bloques)
+//  ~9:30       Silencia eco, luego piano. Deja morir el reverb.
+// ============================================================
+```
+
 - **Proceso de creación del audio generativo.**
 - **Decisiones técnicas y estéticas que se tomaron y por qué.**
 - **Código completo de la pieza de audio.**
