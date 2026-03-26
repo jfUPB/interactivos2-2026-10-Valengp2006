@@ -25,6 +25,7 @@
   - **[Sound space Strudel](https://www.youtube.com/watch?v=dyIkHQbxJFc):** El uso de Strudel como herramienta de live coding también se apoya en referentes existentes dentro de esta plataforma, especialmente en la construcción de “espacios sonoros” mediante ciclos que se superponen y evolucionan con el tiempo. Este enfoque se relaciona directamente con la estructura de la obra, organizada en fases que aumentan progresivamente en complejidad. De este referente se toma la forma de construir el sonido como un entorno dinámico, donde la síntesis y la repetición generan profundidad y transformación.
   - **[Visuales](https://pin.it/6z44seCAb):** Adicionalmente, se cuenta con un tablero de referencias visuales en Pinterest que reúne imágenes relacionadas con la estética del espacio y la formación de estructuras como nebulosas. Estas imágenes funcionan como guía para definir las distintas etapas visuales de la obra, permitiendo establecer una evolución coherente en términos de color, densidad y movimiento.
     <img width="1280" height="555" alt="Captura de pantalla 2026-03-17 a la(s) 9 11 55 a m" src="https://github.com/user-attachments/assets/44eeec71-1f14-4867-8d00-54610ec5f4cd" />
+	- **[Musica orquestal en strudel](https://youtube.com/shorts/cAUgrQALbXo?si=d5ThaOhE20_Bwnjw)**
     
 #### Técnicas de audio generativo que se planea usar y por qué se ajustan al concepto:
 
