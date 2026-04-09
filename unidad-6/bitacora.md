@@ -16,7 +16,58 @@ Usaré paletas de colores alrededor del morado, rosado y naranja, ya que estos c
   
 - **¿Cómo reaccionarán las visuales al audio? (¿Qué parámetros del audio controlarán qué aspectos visuales?)**
 
-Las visuales estarian vinculadas al inicio de cada fase de audio
+##### Fase 1 — El vacío respira
+
+**Piano (`PIANO_ON`, motivos mot1 → mot3)**
+- **Tipo de vínculo:** ON/OFF + reactivo
+- **Elemento visual:** Partículas de polvo estelar muy dispersas, casi estáticas. Cada nota dispara un destello puntual de luz.
+- **Parámetro reactivo:** Amplitud del piano → tamaño del destello. A medida que evoluciona mot1 → mot3, la densidad de partículas sube automáticamente.
+
+**Eco (`ECO_ON`, delay 0.38s)**
+- **Tipo de vínculo:** ON/OFF
+- **Elemento visual:** Un segundo anillo de destellos más tenue, desplazado en el espacio. El eco visual de cada nota del piano.
+- **Parámetro reactivo:** Sin reactividad continua — la aparición ya es el efecto. El delay de 0.38s crea una separación espacial natural entre nota y eco visual.
+
+**Pedal (`PEDAL_ON`, attack 4s)**
+- **Tipo de vínculo:** ON/OFF
+- **Elemento visual:** Una nébula de fondo muy tenue — un velo morado casi imperceptible que llena el espacio gradualmente.
+- **Parámetro reactivo:** El attack de 4s se traduce directo: el velo hace un fade-in de 4 segundos, igual que el audio. Sin reactividad rítmica.
+
+##### Fase 2 — La materia se organiza
+
+**Strings (`STRINGS_ON`, cutoff con sine 500→2000Hz, ciclo 9s)**
+- **Tipo de vínculo:** ON/OFF + reactivo
+- **Elemento visual:** Las partículas comienzan a orbitar — aparecen centros de gravedad y las partículas se agrupan formando filamentos.
+- **Parámetro reactivo:** El sine que mueve el cutoff controla el radio de las órbitas. Cutoff alto = órbitas más abiertas y rápidas.
+
+**Bajo (`BASS_ON`, notas c1/g0, sine puro)**
+- **Tipo de vínculo:** ON/OFF + reactivo
+- **Elemento visual:** Pulso de expansión radial — cada nota genera una onda circular que se propaga desde el centro hacia afuera.
+- **Parámetro reactivo:** Amplitud del bajo → radio máximo de la onda. Es el vínculo más físico y directo: lo que se escucha se ve al instante.
+
+##### Transición Fase 2 → 3
+
+##### Metales / Brass (`BRASS_ON`, french horn, attack 2.5s, cutoff sine 400→1400Hz ciclo 13s)
+- **Tipo de vínculo:** ON/OFF + reactivo
+- **Elemento visual:** Arcos de luz que atraviesan la nébula, como chorros de gas ionizado. Aparecen lentamente (2.5s) igual que el audio.
+- **Parámetro reactivo:** El sine del cutoff + el paneo (ciclo 8s) mueven la dirección y el color de los arcos: de rosa a naranja.
+
+##### Fase 3 — Ignición
+
+**Órgano (`ORGAN_ON`, attack 5s, "pared de sonido")**
+- **Tipo de vínculo:** ON/OFF + reactivo
+- **Elemento visual:** La nébula entera se ilumina — el fondo pasa de morado oscuro a naranja/rosa profundo, como una nebulosa del Hubble en plena formación.
+- **Parámetro reactivo:** El cutoff (300→900Hz, ciclo 10s) controla la saturación del color: cutoff bajo = morado frío, cutoff alto = naranja cálido.
+
+**Pulsar (`PULSAR_ON`, c0, cada 8 tiempos)**
+- **Tipo de vínculo:** ON/OFF + reactivo
+- **Elemento visual:** Flash blanco total — un destello que ilumina toda la pantalla por un instante, como una estrella de neutrones pulsando.
+- **Parámetro reactivo:** Completamente rítmico: cada golpe del pulsar = un flash. Sin reactividad de amplitud — el ritmo lento ya es el efecto.
+
+**Shimmer (ligado a `ORGAN_ON`, notas e5/b5/g5/d6)**
+- **Tipo de vínculo:** Reactivo (sube y baja junto con el órgano)
+- **Elemento visual:** Destellos de alta frecuencia en los bordes de la nébula — chispas en las puntas de los filamentos de gas.
+- **Parámetro reactivo:** El paneo lento (ciclo 7s) mueve los destellos de izquierda a derecha. Al apagar el órgano, el shimmer desaparece junto con él.
   
 - **¿Por qué estas decisiones estéticas sirven al concepto de tu obra?**
 
@@ -40,7 +91,19 @@ Porque el concepto principal de mi obra esta alrdedor del espacio, ya que esta f
 <img width="131" height="213" alt="Captura de pantalla 2026-04-09 a la(s) 8 37 51 a m" src="https://github.com/user-attachments/assets/362c898f-9c8d-4ce8-b6c8-f07bfa1c103f" />
 
 #### Mapeo entre parámetros de audio y parámetros visuales (por ejemplo: frecuencia → color, amplitud → tamaño, etc.).
-<img width="1440" height="2120" alt="image" src="https://github.com/user-attachments/assets/eb2bab39-e0b1-47b7-8182-8ded8d07ac90" />
+
+| Mensaje OSC       | Fuente en Strudel         | Efecto en TouchDesigner                        |
+|-------------------|---------------------------|------------------------------------------------|
+| `/piano/amp`      | Amplitud del piano        | Tamaño de destellos de partículas              |
+| `/piano/density`  | Índice de motivo (0/1/2)  | Densidad del sistema de partículas             |
+| `/bass/amp`       | Amplitud del bajo         | Radio de onda de expansión radial              |
+| `/strings/cutoff` | Sine cutoff (500→2000Hz)  | Radio de órbita de partículas                  |
+| `/brass/cutoff`   | Sine cutoff (400→1400Hz)  | Color y dirección de arcos de luz              |
+| `/brass/pan`      | Sine paneo (ciclo 8s)     | Posición espacial de los arcos                 |
+| `/organ/cutoff`   | Sine cutoff (300→900Hz)   | Saturación de color de la nébula               |
+| `/pulsar/trigger` | Evento rítmico del pulsar | Flash blanco total                             |
+| `/shimmer/pan`    | Sine paneo (ciclo 7s)     | Posición de destellos en bordes de filamentos  |
+| `/phase`          | Constantes ON/OFF         | Cambio de modo visual completo (1 / 2 / 3)    |
 
 ### Referentes:
 
