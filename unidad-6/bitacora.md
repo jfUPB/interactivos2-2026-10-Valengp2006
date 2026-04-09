@@ -4,7 +4,7 @@
 
 ### Actividad 01
 
-#### Prgeuntas
+#### Preguntas
 
 - **¿Qué tipo de visuales van a acompañar tu audio? (formas geométricas, partículas, texturas orgánicas, arte generativo abstracto, representaciones figurativas, etc.)**
 
@@ -105,7 +105,7 @@
 | `/shimmer/pan`    | Sine paneo (ciclo 7s)     | Posición de destellos en bordes de filamentos  |
 | `/phase`          | Constantes ON/OFF         | Cambio de modo visual completo (1 / 2 / 3)    |
 
-### Referentes:
+#### Referentes:
 
 - [Luna en TouchDesigner](https://youtu.be/rLuFBhFJhVU?si=RkDOio56kWYmA5yY)
 - [Estrella grande](https://youtu.be/WS2Ww6zYgJw?si=cYvuc4DIO2Bl3VUJ)
