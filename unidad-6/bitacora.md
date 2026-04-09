@@ -8,11 +8,11 @@
 
 - **¿Qué tipo de visuales van a acompañar tu audio? (formas geométricas, partículas, texturas orgánicas, arte generativo abstracto, representaciones figurativas, etc.)**
 
-Las visuales que van a acompañar mi audio son particulas y algunas texturas organicas que representen diferentes cosas. El proyecto esta dividido en 3 fases, comenzando en la fase 1 con un fondo unicolor que asemeje al espacio y particulas dispersas que representen las estrellas; continuando con la fase 2, tendriamos la aparecion de formas abstractas similares nubes que representan nebulosas espaciales, comenzando a darle algo de peso a las visuales mientras el audio tambien sube la intensidad; finalmente, en la fase 3 aparecerian figuras un poco mas circulares que asemejen planetas, agujeros negros y demas cuerpos celestes para dar una sensacion de asombro al usuario a medida que la musica se vuelve mas epica y por tanto las visuales tambien.
+  Las visuales que van a acompañar mi audio son particulas y algunas texturas organicas que representen diferentes cosas. El proyecto esta dividido en 3 fases, comenzando en la fase 1 con un fondo unicolor que asemeje al espacio y particulas dispersas que representen las estrellas; continuando con la fase 2, tendriamos la aparecion de formas abstractas similares nubes que representan nebulosas espaciales, comenzando a darle algo de peso a las visuales mientras el audio tambien sube la intensidad; finalmente, en la fase 3 aparecerian figuras un poco mas circulares que asemejen planetas, agujeros negros y demas cuerpos celestes para dar una sensacion de asombro al usuario a medida que la musica se vuelve mas epica y por tanto las visuales tambien.
   
 - **¿Qué paleta de colores usarás y por qué?**
 
-Usaré paletas de colores alrededor del morado, rosado y naranja, ya que estos colores son los que se visualizan comunmente en las imagenes que tenemos del espacio. 
+  Usaré paletas de colores alrededor del morado, rosado y naranja, ya que estos colores son los que se visualizan comunmente en las imagenes que tenemos del espacio. 
   
 - **¿Cómo reaccionarán las visuales al audio? (¿Qué parámetros del audio controlarán qué aspectos visuales?)**
 
@@ -71,7 +71,7 @@ Usaré paletas de colores alrededor del morado, rosado y naranja, ya que estos c
   
 - **¿Por qué estas decisiones estéticas sirven al concepto de tu obra?**
 
-Porque el concepto principal de mi obra esta alrdedor del espacio, ya que esta fue mi inspiracion inicial, y este tipo de texturas y colores son comunmente en las imagenes que conoces del espacio exterior.
+  Porque el concepto principal de mi obra esta alrdedor del espacio, ya que esta fue mi inspiracion inicial, y este tipo de texturas y colores son comunmente en las imagenes que conoces del espacio exterior.
 
 #### Bocetos o mockups de cómo imaginas las visuales.
 
