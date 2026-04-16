@@ -112,6 +112,51 @@
 - [Nube de particulas](https://youtu.be/Jz-irdEYUZM?si=nubdSfaiuVqoo2ni)
 - [Nebulosas](https://youtu.be/SlVoPnsQlbU?si=_75DR91a-v6VKFyQ)
 
+### Actividad 02
+
+#### Exploración de técnicas y prototipos
+
+Durante esta etapa exploré diferentes técnicas dentro de TouchDesigner, comenzando con procesamiento de imagen en tiempo real mediante el uso de TOPs, y posteriormente avanzando hacia sistemas de partículas (POPs) para lograr resultados más complejos.
+
+Inicialmente realicé pruebas básicas guiadas por una IA, con el objetivo de comprender el funcionamiento general del software, especialmente en la manipulación de texturas y flujos visuales.
+
+A partir de estas bases, pasé a seguir tutoriales más avanzados de YouTube enfocados en el uso de partículas.
+
+Como resultado, logré desarrollar un prototipo visual compuesto por:
+	•	Una luna generada con partículas
+	•	Un vórtice dinámico
+	•	Un cúmulo de estrellas
+
+**Evidencia – Prototipo Luna**
+https://github.com/user-attachments/assets/0a6abd8f-7ca3-4f2a-82b5-4f0802635044
+
+**Evidencia – Vórtice y estrellas**
+
+
+
+#### Resultados y ajustes
+
+Durante el proceso surgieron varios problemas técnicos. Uno de los principales fue que los elementos visuales no se renderizaban de forma independiente: la textura de la luna se estaba aplicando también al vórtice.
+
+Para solucionar esto, opté por organizar el proyecto en containers separados, dejando la luna en uno y el vórtice junto con las estrellas en otro. Esta decisión permitió aislar correctamente cada sistema visual y controlar mejor los renders.
+
+**Evidencia – Solución con containers**
+
+En cuanto a la integración de audio y visuales, enfrenté múltiples dificultades. Aunque lograba recibir mensajes desde el websocket, no estaba capturando correctamente los eventos enviados desde Strudel.
+
+Intenté reiniciar el proceso desde cero utilizando el ejemplo proporcionado por el profesor y apoyándome nuevamente en IA, pero el problema persistió. Finalmente, con ayuda del profesor en clase, logré establecer correctamente la conexión.
+
+#### Técnica seleccionada y justificación
+
+La técnica principal elegida para mi obra es la combinación de sistemas de partículas (POPs) con procesamiento de imagen en tiempo real, integrada con reactividad al audio.
+
+Esta combinación me permite:
+	•	Generar visuales más orgánicos y dinámicos (partículas)
+	•	Mantener control sobre la estética visual (TOPs)
+	•	Crear una relación directa entre sonido e imagen (audio-reactividad)
+
+Como resultado final del prototipo, logré que la luna reaccionara al audio: específicamente, cada vez que se activa un bombo, la luna parpadea, estableciendo una conexión clara entre lo sonoro y lo visual.
+
 ## Bitácora de aplicación 
 
 
