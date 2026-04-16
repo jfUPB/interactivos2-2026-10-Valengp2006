@@ -128,11 +128,12 @@ Como resultado, logré desarrollar un prototipo visual compuesto por:
 	•	Un cúmulo de estrellas
 
 **Evidencia – Prototipo Luna**
-https://github.com/user-attachments/assets/0a6abd8f-7ca3-4f2a-82b5-4f0802635044
+
+<img width="702" height="384" alt="Grabación de pantalla 2026-04-16 a la(s) 9 58 41 a" src="https://github.com/user-attachments/assets/287fbdde-ab30-4e64-92bd-cf3bc2123f46" />
 
 **Evidencia – Vórtice y estrellas**
 
-
+<img width="694" height="388" alt="Grabación de pantalla 2026-04-16 a la(s) 10 05 51 a" src="https://github.com/user-attachments/assets/15a66504-33f7-4173-bd61-0da642c416c7" />
 
 #### Resultados y ajustes
 
