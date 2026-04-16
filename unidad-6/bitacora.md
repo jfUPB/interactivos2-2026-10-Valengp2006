@@ -160,5 +160,43 @@ Como resultado final del prototipo, logré que la luna reaccionara al audio: esp
 
 ## Bitácora de aplicación 
 
+### Actividad 03 – Integración de visuales reactivas con audio
+
+#### Proceso de implementación de las visuales
+
+Para esta actividad trabajé con las visuales desarrolladas previamente: una luna generada con partículas, acompañada de un vórtice y un cúmulo de estrellas.
+
+La implementación se centró en modificar parámetros específicos para hacer que los elementos respondieran al audio. En particular, utilicé el parámetro LFO1 de la luna, el cual controla un pulso que afecta directamente el brillo del objeto.
+
+A través de una línea de código, conecté este parámetro con la señal de audio, permitiendo que la intensidad visual de la luna estuviera directamente influenciada por el sonido.
+
+#### Sincronización entre audio y visuales
+
+La sincronización se logró utilizando Strudel como generador de audio, en conjunto con TouchDesigner mediante un complemento proporcionado por el profesor.
+
+Inicialmente, presenté problemas en la comunicación entre ambas herramientas. Aunque lograba establecer la conexión, los mensajes no estaban llegando correctamente a TouchDesigner. Tras revisar el proceso, identifiqué dos errores principales:
+	•	La dirección de envío estaba mal escrita
+	•	No había incluido la extensión .osc en el código de Strudel
+
+Estos errores impedían que los mensajes fueran correctamente enviados y recibidos. Una vez corregidos, la comunicación se estableció de forma adecuada.
+
+Como resultado, logré que eventos específicos del audio, en este caso el bombo, activaran cambios visuales en tiempo real. Cada vez que se reproduce el bombo, la luna genera un parpadeo, sincronizando de manera clara el sonido con la imagen.
+
+#### Decisiones técnicas y estéticas
+
+La decisión de vincular el bombo con la luna responde a su papel como elemento rítmico principal dentro del audio. Al ser el pulso más marcado, permite generar una relación clara y perceptible entre sonido y visual.
+
+A nivel estético, busqué que la luna se percibiera como un elemento “vivo”, capaz de reaccionar a su entorno sonoro. El uso del pulso en el brillo refuerza esta idea, generando una sensación de respiración o latido.
+
+La combinación de sistemas de partículas con audio-reactividad permite construir una experiencia más inmersiva, en la que los elementos visuales no son estáticos, sino que responden dinámicamente al sonido.
+
+#### Instrucciones para reproducir la obra
+
+	1.	Abrir el proyecto en TouchDesigner
+	2.	Verificar que el complemento de recepción de datos (OSC/WebSocket) esté activo
+	3.	Ejecutar el patch correspondiente a las visuales
+	4.	Iniciar el código en Strudel
+	5.	Verificar la conexión entre ambas herramientas
+	6.	Al reproducirse el audio, observar cómo la luna reacciona al bombo mediante cambios en su brillo
 
 ## Bitácora de reflexión
