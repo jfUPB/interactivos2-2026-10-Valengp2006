@@ -152,9 +152,9 @@ Intenté reiniciar el proceso desde cero utilizando el ejemplo proporcionado por
 La técnica principal elegida para mi obra es la combinación de sistemas de partículas (POPs) con procesamiento de imagen en tiempo real, integrada con reactividad al audio.
 
 Esta combinación me permite:
-	•	Generar visuales más orgánicos y dinámicos (partículas)
-	•	Mantener control sobre la estética visual (TOPs)
-	•	Crear una relación directa entre sonido e imagen (audio-reactividad)
+- Generar visuales más orgánicos y dinámicos (partículas)
+- Mantener control sobre la estética visual (TOPs)
+- Crear una relación directa entre sonido e imagen (audio-reactividad)
 
 Como resultado final del prototipo, logré que la luna reaccionara al audio: específicamente, cada vez que se activa un bombo, la luna parpadea, estableciendo una conexión clara entre lo sonoro y lo visual.
 
