@@ -38,6 +38,14 @@ El sistema opera bajo una arquitectura de red local para el performer y una capa
 | **03** | **Lógica en TouchDesigner** | Mapear los mensajes OSC entrantes a los operadores correspondientes (ej. un `Cross TOP` para el vórtice y un `Constant CHOP` para el color de la luna). |
 | **04** | **Sincronización y Test** | Realizar pruebas de estrés conectando varios celulares para verificar que el cambio de color de la luna sea fluido y no interfiera con el slider del performer. |
 
+### Actividad 02
+
+- **Superficie de control:** Crea tu superficie de control personalizada (con Open Stage Control u otra herramienta) para controlar los parámetros que definiste en la actividad anterior.
+- **Participación del público:** Implementa el mecanismo de participación del público (con Socket.io + celular u otra solución que se ajuste a tu concepto).
+- **El proceso de implementación de cada subsistema.**
+- **Las pruebas realizadas para verificar que cada subsistema funciona de forma independiente.**
+- **Los problemas encontrados y cómo los resolviste.**
+
 ## Bitácora de aplicación 
 
 
