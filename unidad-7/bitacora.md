@@ -252,11 +252,11 @@ El sistema funciona correctamente desde la primera implementación:
 - La lógica de estados del Vórtice es clara y consistente.
 
 #### 4. Código de la Obra Integrada
-```html
+
 <aside>
 Nota: El código completo se adjunta en los archivos del proyecto debido a su extensión.
 </aside>
-```
+
 
 Se incluyen:
 
