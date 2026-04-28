@@ -253,12 +253,9 @@ El sistema funciona correctamente desde la primera implementación:
 
 #### 4. Código de la Obra Integrada
 
-<aside>
-Nota: El código completo se adjunta en los archivos del proyecto debido a su extensión.
-</aside>
+**Nota:** El código completo se adjunta en los archivos del proyecto debido a su extensión.
 
-
-Se incluyen:
+**Se incluyen:**
 
 - Script de Strudel (.osc)
 - Proyecto de TouchDesigner (.toe)
