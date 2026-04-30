@@ -320,3 +320,58 @@ node server.js
 - iPhone (interacción del público)
 
 ## Bitácora de reflexión
+
+### Actividad 04
+
+#### 1. Ensayo de la Obra: Análisis de Resultados
+
+El ensayo general del ecosistema audiovisual "Cosmos" se llevó a cabo para evaluar la estabilidad de la red local, la respuesta de los sistemas generativos y la experiencia de usuario (UX) tanto del performer como del público. A continuación, se detallan los hallazgos:
+
+**¿Qué funcionó?**
+
+- **Interactividad del Público:** La conexión de los usuarios al servidor Node.js funcionó a la perfección. Los espectadores pudieron acceder a la interfaz mediante sus teléfonos móviles sin necesidad de realizar modificaciones en la red o en sus dispositivos, logrando una participación fluida.
+- **Síntesis Visual y Reactividad:** La capa visual desarrollada en TouchDesigner respondió de manera óptima a los inputs externos. La Luna y el Vórtice reaccionaron en tiempo real a los cambios de color (RGB) enviados por el público, confirmando que el puente entre WebSockets y OSC opera con latencia casi nula.
+
+**¿Qué falló?**
+
+- **Despliegue Visual (Perform Mode):** La visualización de la obra en TouchDesigner se percibió inmersivamente incompleta o "rara", debido a que aún no se ha configurado la ventana de *Perform Mode*. Esto provocó que la salida visual mostrara la interfaz del software en lugar de una proyección a pantalla completa.
+- **Inestabilidad en el Control Remoto:** El controlador de Open Stage Control presentó fallos de conexión al intentar operarse desde el dispositivo móvil (celular/iPad) durante la presentación en vivo.
+- **Envolventes de Audio (Strudel):** Se detectaron problemas en el diseño sonoro. En ciertas transiciones, la música sufre cortes abruptos en lugar de aplicar un *fade out* (desvanecimiento suave). Esta caída repentina del sonido rompe la narrativa y saca al usuario de la experiencia inmersiva.
+
+**¿Qué se ajustó (y próximos pasos)?**
+
+- **Plan de Contingencia del Performer:** Al fallar Open Stage Control en el dispositivo móvil, la ejecución y el control de los estados narrativos (cambio de estrellas a vórtice) se reasignaron exitosamente para ser operados directamente desde el computador central.
+- **Ajustes Pendientes (Post-ensayo):** Se determinó como prioridad técnica configurar el *Window COMP* en TouchDesigner para activar un *Perform Mode* limpio. Paralelamente, se ajustará el código en Strudel para añadir transiciones de volumen (ADSR envelopes) que garanticen un desvanecimiento musical orgánico.
+
+#### 2. Diagrama del Sistema Final (Actualizado)
+
+```mermaid
+graph LR
+    subgraph Audiencia
+        P[📱 Smartphones del Público<br>Interfaz Web]
+    end
+
+    subgraph Nodo Central [💻 MacBook Pro - Host / IP: 172.20.10.6]
+        N[🟢 Servidor Node.js<br>Puerto 3000]
+        TD[🟣 TouchDesigner<br>Motor Visual]
+        S[🟡 Strudel<br>Motor de Audio]
+        OSC[⚪ Open Stage Control<br>Performer Local]
+    end
+
+    P -- "HTTP/WebSocket<br>(Conexión QR)" --> N
+    N -- "OSC (Puerto 7000)<br>Color RGB" --> TD
+    S -- "OSC (Puerto 8080)<br>Pulso (bd)" --> TD
+    OSC -- "OSC (Puerto 9000)<br>Cambio de Estado" --> TD
+
+    %% Estilos
+    style P fill:#add8e6,stroke:#333,stroke-width:2px,color:#000
+    style N fill:#90ee90,stroke:#333,stroke-width:2px,color:#000
+    style TD fill:#dda0dd,stroke:#333,stroke-width:2px,color:#000
+    style S fill:#ffffe0,stroke:#333,stroke-width:2px,color:#000
+    style OSC fill:#d3d3d3,stroke:#333,stroke-width:2px,color:#000
+    style Nodo Central fill:#f9f9f9,stroke:#666,stroke-width:2px,stroke-dasharray: 5 5
+```
+
+#### Enlace al repositorio
+
+https://github.com/Valengp2006/Proyecto_Cosmos/tree/main
