@@ -186,5 +186,3 @@ También se identificó la importancia de traducir procesos complejos en explica
 - Un buen diagrama puede comunicar más rápido que una explicación extensa.
 - La claridad en los pasos de ejecución es clave para la reproducibilidad.
 - Conectar lo técnico con lo conceptual fortalece el valor del proyecto.
-
-Cuando lo pases al README, básicamente será copiar/pegar + agregar visuales… y listo 🚀
