@@ -58,7 +58,7 @@ graph LR
 1. Clonar el repositorio:
 
 ```bash
-git clone https://github.com/Valengp2006/Proyecto_Cosmos.git
+git clone [Enlace al repositorio]
 cd Proyecto_Cosmos
 ```
 
@@ -112,11 +112,7 @@ http://[IP-del-servidor]:3000
 
 #### 3. Explicación detallada
 
-**Concepto artístico**
-
 *Cosmos* es una experiencia audiovisual interactiva que simula la formación de un entorno espacial. La obra se desarrolla de manera progresiva, pasando de un estado de calma a uno de alta intensidad, generando sensaciones de expansión, descubrimiento y asombro.
-
-**Funcionamiento del sistema**
 
 El sistema se organiza en cuatro componentes:
 
@@ -125,24 +121,7 @@ El sistema se organiza en cuatro componentes:
 - **Performer (Open Stage Control):** controla la transición entre estados visuales.
 - **Público (Web + Socket.io):** interviene modificando el color de la luna en tiempo real.
 
-**Justificación técnica**
-
-- **OSC:** permite comunicación eficiente y en tiempo real entre audio y visuales.
-- **Socket.io:** facilita la interacción multiusuario desde navegadores.
-- **Node.js:** actúa como puente entre web y sistema visual.
-- **TouchDesigner:** permite crear visuales complejas y reactivas.
-- **Strudel:** permite generar estructuras sonoras dinámicas mediante live coding.
-
-Estas herramientas permiten construir un sistema modular, estable y en tiempo real.
-
-**Justificación estética**
-
-- La obra utiliza una estética espacial basada en nebulosas y cuerpos celestes.
-- La paleta de colores (morado, rosado, naranja) está inspirada en imágenes astronómicas.
-- El uso de partículas permite representar procesos de formación y movimiento.
-- La luna funciona como elemento central y punto de conexión con el público.
-
-**Relación concepto–técnica**
+Por otro lado, la obra utiliza una estética espacial basada en nebulosas y cuerpos celestes, una paleta de colores en tonos morado, rosado y naranja, inspirada en imágenes astronómicas. De igual forma, el uso de partículas permite representar procesos de formación y movimiento, ademas de tener a la luna funciona como elemento central y punto de conexión con el público.
 
 El sistema distribuye el control de la experiencia:
 
@@ -154,33 +133,7 @@ Esto convierte la obra en un sistema dinámico donde múltiples agentes influyen
 
 ### Actividad 02 — Escritura de la documentación
 
-**Fecha: 5 de mayo de 2026**
 
-#### 1. Construcción de la documentación
-
-Para esta actividad se organizó la documentación del proyecto en tres secciones principales: diagrama del sistema, instrucciones de reproducción y explicación detallada. El objetivo fue transformar el proceso de desarrollo en una guía clara que permita a otros comprender y ejecutar la obra.
-
-#### 2. Decisiones en la organización
-
-Se optó por estructurar la documentación de la siguiente manera:
-
-- Primero, una **visión general del sistema** mediante un diagrama que permite entender rápidamente las conexiones.
--  Luego, una **guía paso a paso**, enfocada en la reproducibilidad.
--  Finalmente, una **explicación conceptual y técnica**, que conecta el funcionamiento con la intención artística.
-
-Esta organización facilita distintos niveles de lectura: técnico, práctico y conceptual.
-
-#### 3. Reflexión sobre el proceso
-
-El ejercicio de documentar permitió evidenciar que el proyecto no es únicamente una pieza visual o sonora, sino un sistema interactivo compuesto por múltiples capas interconectadas.
-
-Además, ayudó a clarificar:
-
-- La relación entre los distintos componentes
-- El flujo de información dentro del sistema
-- La intención detrás de cada decisión técnica
-
-También se identificó la importancia de traducir procesos complejos en explicaciones claras, especialmente cuando se busca que otros puedan reproducir la obra.
   
 ## Bitácora de aplicación 
 
