@@ -130,10 +130,6 @@ El sistema distribuye el control de la experiencia:
 - El **público** introduce variación
 
 Esto convierte la obra en un sistema dinámico donde múltiples agentes influyen en un mismo entorno.
-
-### Actividad 02 — Escritura de la documentación
-
-
   
 ## Bitácora de aplicación 
 
