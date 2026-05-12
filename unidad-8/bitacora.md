@@ -6,7 +6,11 @@
 
 **Fecha: 5 de mayo de 2026**
 
-#### 1. Diagrama del sistema
+#### Cosmos: Instalación Audiovisual Interactiva
+
+Cosmos es un ecosistema audiovisual vivo moldeado por la interacción colectiva. La obra propone un diálogo a tres bandas: un pulso sonoro constante, un performer que guía la tensión narrativa a través de estados visuales (de un campo de estrellas a un vórtice profundo), y un público activo que, mediante sus propios dispositivos, tiñe e interviene la instalación en tiempo real. Es una exploración de cómo las interfaces web pueden difuminar la barrera entre el espectador y la obra.
+
+##### 1. Diagrama del sistema:
 
 El sistema de la obra *Cosmos* se estructura como un ecosistema interactivo en tiempo real compuesto por cuatro componentes principales: **audio, visuales, performer y público**, conectados mediante protocolos de comunicación que permiten el flujo continuo de datos.
 
@@ -35,7 +39,15 @@ graph LR
 - El **performer**, a través de Open Stage Control, controla la transición estructural de la obra.
 - El **público**, desde sus dispositivos móviles, envía información de color mediante Socket.io hacia un servidor Node.js, que traduce estos datos a OSC para modificar parámetros visuales.
 
-#### 2. Paso a paso para reproducir la obra
+El proyecto utiliza una arquitectura de red local distribuida mediante **OSC** y **WebSockets** para garantizar comunicación simultánea y fluida.
+
+| Componente | Plataforma / Tecnología | Puerto de Entrada (TD) | Función Principal |
+| :--- | :--- | :--- | :--- |
+| **Audio (Pulsar)** | Strudel (Live Coding) + OSC Bridge | `8080` (UDP) | Sincroniza el parpadeo de la Luna mediante la detección del sonido `bd`. |
+| **Performer** | iPad (Open Stage Control) | `9000` (UDP) | Controla la transición de estados (Estrellas → Vórtice) y el ciclo evolutivo de la obra. |
+| **Público** | Smartphones (Node.js + Socket.io) | `7000` (UDP) | Envía datos de color RGB en tiempo real para teñir la Luna. |
+
+##### 2. Paso a paso para reproducir la obra
 
 **Requisitos previos**
 
@@ -58,21 +70,31 @@ graph LR
 1. Clonar el repositorio:
 
 ```bash
-git clone [Enlace al repositorio]
+git clone https://github.com/Valengp2006/Proyecto_Cosmos.git
 cd Proyecto_Cosmos
 ```
 
-2. Instalar dependencias:
+2. Entrar a la carpeta `Servidor`
+
+```bash
+cd Servidor
+```
+
+3. Instalar dependencias:
 
 ```bash
 npm install
 ```
+
+> [!NOTE]
+> Si se trabaja con Windows asegurarse de tener instalado `GitBash`, si es con MacOS se puede trabajar desde la terminal.
 
 **Ejecución del sistema**
 
 1. Iniciar el servidor:
 
 ```bash
+cd Servidor
 node server.js
 ```
 
@@ -91,8 +113,9 @@ node server.js
 
 4. Conectar Open Stage Control:
 
-- Abrir interfaz del performer
-- Probar slider y botón reset
+- Abrir el archivo `LauncherConfig` con la configuración del launcher de Open Stage Control
+- Abrir el archivo `ClientUI` con la interfaz del performer
+- Probar los slider y botón reset
 
 5. Conectar público:
 
@@ -103,6 +126,10 @@ node server.js
 http://[IP-del-servidor]:3000
 ```
 
+> [!NOTE]
+> **Para Windows:** escribe `ipconfig` y presiona `Enter`.Busca la línea que dice `Dirección IPv4`.
+> **Para Mac:** usa `ifconfig` y busca la sección `inet`
+
 6. Verificar funcionamiento:
 
 - La luna cambia de color
@@ -110,9 +137,9 @@ http://[IP-del-servidor]:3000
 - Existe sincronización con el audio
 - No hay latencia perceptible
 
-#### 3. Explicación detallada
+##### 3. Explicación y justificación
 
-*Cosmos* es una experiencia audiovisual interactiva que simula la formación de un entorno espacial. La obra se desarrolla de manera progresiva, pasando de un estado de calma a uno de alta intensidad, generando sensaciones de expansión, descubrimiento y asombro.
+###### Funcionamiento del sistema
 
 El sistema se organiza en cuatro componentes:
 
@@ -121,7 +148,24 @@ El sistema se organiza en cuatro componentes:
 - **Performer (Open Stage Control):** controla la transición entre estados visuales.
 - **Público (Web + Socket.io):** interviene modificando el color de la luna en tiempo real.
 
-Por otro lado, la obra utiliza una estética espacial basada en nebulosas y cuerpos celestes, una paleta de colores en tonos morado, rosado y naranja, inspirada en imágenes astronómicas. De igual forma, el uso de partículas permite representar procesos de formación y movimiento, ademas de tener a la luna funciona como elemento central y punto de conexión con el público.
+###### Justificación técnica
+
+- **OSC:** permite comunicación eficiente y en tiempo real entre audio y visuales.
+- **Socket.io:** facilita la interacción multiusuario desde navegadores.
+- **Node.js:** actúa como puente entre web y sistema visual.
+- **TouchDesigner:** permite crear visuales complejas y reactivas.
+- **Strudel:** permite generar estructuras sonoras dinámicas mediante live coding.
+
+Estas herramientas permiten construir un sistema modular, estable y en tiempo real.
+
+###### Justificación estética
+
+- La obra utiliza una estética espacial basada en nebulosas y cuerpos celestes.
+- La paleta de colores (morado, rosado, naranja) está inspirada en imágenes astronómicas.
+- El uso de partículas permite representar procesos de formación y movimiento.
+- La luna funciona como elemento central y punto de conexión con el público.
+
+###### Relación concepto–técnica
 
 El sistema distribuye el control de la experiencia:
 
@@ -130,6 +174,15 @@ El sistema distribuye el control de la experiencia:
 - El **público** introduce variación
 
 Esto convierte la obra en un sistema dinámico donde múltiples agentes influyen en un mismo entorno.
+
+##### 4. Estructura del Repositorio
+
+El repositorio está organizado en módulos independientes para facilitar su ejecución y comprensión:
+
+- `/Visuales`: Contiene el archivo `.toe` principal de TouchDesigner con la síntesis visual.
+- `/Servidor`: Entorno de Node.js, incluyendo `server.js` y la carpeta `/public` con la interfaz del espectador (`index.html`).
+- `/Control`: Layout de configuración de interfaz para Open Stage Control.
+- `/Audio`: Archivos de texto plano con la partitura generativa escrita en Strudel.
   
 ## Bitácora de aplicación 
 
